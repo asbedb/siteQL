@@ -1,7 +1,7 @@
 # DevFolio
 
-[![GitHub issues](https://img.shields.io/github/issues/yourusername/yourproject.svg)](https://github.com/yourusername/yourproject/issues)
-[![GitHub stars](https://img.shields.io/github/stars/yourusername/yourproject.svg)](https://github.com/yourusername/yourproject/stargazers)
+[![GitHub issues](https://img.shields.io/github/issues/asbedb/devfolio.svg)](https://github.com/asbedb/devfolio/issues)
+[![GitHub stars](https://img.shields.io/github/stars/asbedb/devfolio.svg)](https://github.com/asbedb/devfolio/stargazers)
 
 DevFolio is my first major undertaking to build a full-stack web application. Originally conceived as a simple portfolio website, it has evolved into a robust content management system with authentication and self-installation capabilities. The current release supports self-installation, with ongoing optimizations planned for the dashboard and index.
 
