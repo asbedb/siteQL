@@ -21,8 +21,7 @@ DevFolio assumes the following dependencies:
 
 ## Installation
 To install DevFolio, clone the repository and run the following command in the project directory:
-
-```npm install
+```npm install```
 
 To recompile CSS you can run:
-```npm css
+```npm css```
