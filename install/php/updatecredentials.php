@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     // Check if the prepare statement was successful
     if ($updateStmt) {
-        mysqli_stmt_bind_param($updateStmt, 'sssi', $fullName, $email, $password, $userIdToUpdate);
+        mysqli_stmt_bind_param($updateStmt, 'isss', $userIdToUpdate, $fullName, $email, $password);
         mysqli_stmt_execute($updateStmt);
 
         // Check if update was successful
