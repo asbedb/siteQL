@@ -136,7 +136,7 @@ function updateDBConfig() {
     showLoadingSpinnerButton(saveButtonLoadWrapper);
 
     // Make an AJAX request
-    var updateUrl = currentFolder + "php/updatehost.php";
+    var updateUrl = currentFolder + "/php/updatehost.php";
     xhr.open("POST", updateUrl, true);
 
     xhr.onreadystatechange = function () {

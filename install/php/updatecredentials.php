@@ -9,7 +9,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $userIdToUpdate = 1; // Change this to the desired user_id
 
     // Update data for user_id 1
-    $updateStmt = mysqli_prepare($con, "UPDATE $tableName SET full_name = ?, user_email = ?, user_password = ? WHERE user_id = ?");
+    $query = "INSERT INTO $tableName (user_id, full_name, user_email, user_password) VALUES (?, ?, ?, ?) 
+        ON DUPLICATE KEY UPDATE full_name = VALUES(full_name), user_email = VALUES(user_email), user_password = VALUES(user_password)";
+    $updateStmt = mysqli_prepare($con, $query);
     
     // Check if the prepare statement was successful
     if ($updateStmt) {

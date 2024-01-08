@@ -1,4 +1,5 @@
 <?php
+error_reporting(E_ALL);
 // Retrieve form data
 $DATABASE_HOST = !empty($_POST['sql-host']) ? $_POST['sql-host'] : 'localhost';
 $DATABASE_USER = !empty($_POST['sql-user']) ? $_POST['sql-user'] : 'root';
@@ -73,7 +74,7 @@ $config .= "    exit('Failed to connect to MySQL: ' . mysqli_connect_error());\n
 $config .= "}\n";
 $config .= "?>";
 
-file_put_contents(__DIR__ . '/../php/dbconfig.php', $config);
+file_put_contents(__DIR__ . '/dbconfig.php', $config);
 // Send a success response (important for XHR)
 echo "success"; 
 ?>
