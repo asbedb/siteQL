@@ -3,7 +3,7 @@
 [![GitHub issues](https://img.shields.io/github/issues/asbedb/devfolio.svg)](https://github.com/asbedb/siteQL/issues)
 [![GitHub stars](https://img.shields.io/github/stars/asbedb/devfolio.svg)](https://github.com/asbedb/siteQL/stargazers)
 
-siteQL is my first major undertaking to build a full-stack web application. This stack is built to be a modular SQL database/website installer with credentials created and hased for first user login. The installer goes through a guided form and finalises with a html install.
+siteQL is my first major undertaking to build a full-stack web application. This stack is built to be a modular SQL database/website installer with credentials created and hashed for first user login. The installer goes through a guided form and finalises with a database configuration and www root directory. 
 
 ## Table of Contents
 - [Key Features](#key-features)
@@ -11,23 +11,17 @@ siteQL is my first major undertaking to build a full-stack web application. This
 - [Installation](#installation)
 
 ## Key Features
-DevFolio offers a range of features for showcasing your work and managing content on your portfolio website. Currently being worked on with the next commit to bring more functionality and changes.
+siteQL is built to make deploying webapp's admin friendly and can be implemented in a number of projects with minimal dependencies.
 
 ## Dependencies
-DevFolio assumes the following dependencies:
+siteQL assumes the following dependencies:
 
 - Node.js (for running NPM commands)
 - LAMP/XAMP Stack (for SQL and web server)
 
 ## Installation
-To install DevFolio, clone the repository and run the following command in the project directory:
+To install siteQL locally, clone the repository and run the following command in the project directory:
 
 ```npm install```
 
-Follow this with an:
-
-```npm start```
-
-To recompile CSS you can run:
-
-```npm css```
+The root should be in a hosted environment locally to serve pages via your browser. 
