@@ -1,4 +1,4 @@
-# DevFolio
+# siteQL
 
 [![GitHub issues](https://img.shields.io/github/issues/asbedb/devfolio.svg)](https://github.com/asbedb/siteQL/issues)
 [![GitHub stars](https://img.shields.io/github/stars/asbedb/devfolio.svg)](https://github.com/asbedb/siteQL/stargazers)
