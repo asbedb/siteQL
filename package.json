@@ -1,5 +1,5 @@
 {
-    "name": "siteQL",
+    "name": "siteql",
     "version": "1.0.0",
     "description": "a simple SQL web app installer",
     "scripts": {
