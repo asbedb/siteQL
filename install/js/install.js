@@ -265,7 +265,7 @@ function uploadImage(profilePictureFile, siteLogoFile) {
     })
     .catch(error => {
         // Handle upload error
-        console.error('Error uploading files:', error.message);
+        //console.error('Error uploading files:', error.message);
     });
 }
 

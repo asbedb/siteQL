@@ -1,10 +1,10 @@
 :root{
   /*BG Colors*/
-  --darkest: #102a43;
-  --darker: #486581;
-  --dark: 	#6a87a2;
-  --lighter: #829ab1;
-  --lightest:	#bcccdc;
+  --darkest: #0B2027;
+  --darker: #40798C;
+  --dark: 	#70A9A1;
+  --lighter: #CFD7C7;
+  --lightest:	#F6F1D1;
   /*Font Colors*/
   --offwhite: #f0f4f8;
 }
@@ -159,4 +159,5 @@ h1{
 .logo{
   width: 50%;
   height: 50%;
+  border-radius: 100%;
 }
