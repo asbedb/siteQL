@@ -83,10 +83,10 @@ var viewport = 'viewport';
 var popper = 'popper';
 var reference = 'reference';
 var variationPlacements = /*#__PURE__*/basePlacements.reduce(function (acc, placement) {
-  return acc.concat([placement + "-" + start, placement + "-" + end]);
+    return acc.concat([placement + "-" + start, placement + "-" + end]);
 }, []);
 var enums_placements = /*#__PURE__*/[].concat(basePlacements, [auto]).reduce(function (acc, placement) {
-  return acc.concat([placement, placement + "-" + start, placement + "-" + end]);
+    return acc.concat([placement, placement + "-" + start, placement + "-" + end]);
 }, []); // modifiers that need to read the DOM
 
 var beforeRead = 'beforeRead';
@@ -103,42 +103,42 @@ var afterWrite = 'afterWrite';
 var modifierPhases = [beforeRead, read, afterRead, beforeMain, main, afterMain, beforeWrite, write, afterWrite];
 ;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/dom-utils/getNodeName.js
 function getNodeName(element) {
-  return element ? (element.nodeName || '').toLowerCase() : null;
+    return element ? (element.nodeName || '').toLowerCase() : null;
 }
 ;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/dom-utils/getWindow.js
 function getWindow(node) {
-  if (node == null) {
-    return window;
-  }
+    if (node == null) {
+        return window;
+    }
 
-  if (node.toString() !== '[object Window]') {
-    var ownerDocument = node.ownerDocument;
-    return ownerDocument ? ownerDocument.defaultView || window : window;
-  }
+    if (node.toString() !== '[object Window]') {
+        var ownerDocument = node.ownerDocument;
+        return ownerDocument ? ownerDocument.defaultView || window : window;
+    }
 
-  return node;
+    return node;
 }
 ;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/dom-utils/instanceOf.js
 
 
 function isElement(node) {
-  var OwnElement = getWindow(node).Element;
-  return node instanceof OwnElement || node instanceof Element;
+    var OwnElement = getWindow(node).Element;
+    return node instanceof OwnElement || node instanceof Element;
 }
 
 function isHTMLElement(node) {
-  var OwnElement = getWindow(node).HTMLElement;
-  return node instanceof OwnElement || node instanceof HTMLElement;
+    var OwnElement = getWindow(node).HTMLElement;
+    return node instanceof OwnElement || node instanceof HTMLElement;
 }
 
 function isShadowRoot(node) {
   // IE 11 has no ShadowRoot
-  if (typeof ShadowRoot === 'undefined') {
-    return false;
-  }
+    if (typeof ShadowRoot === 'undefined') {
+        return false;
+    }
 
-  var OwnElement = getWindow(node).ShadowRoot;
-  return node instanceof OwnElement || node instanceof ShadowRoot;
+    var OwnElement = getWindow(node).ShadowRoot;
+    return node instanceof OwnElement || node instanceof ShadowRoot;
 }
 
 
@@ -148,14 +148,14 @@ function isShadowRoot(node) {
 // and applies them to the HTMLElements such as popper and arrow
 
 function applyStyles(_ref) {
-  var state = _ref.state;
-  Object.keys(state.elements).forEach(function (name) {
+    var state = _ref.state;
+    Object.keys(state.elements).forEach(function (name) {
     var style = state.styles[name] || {};
     var attributes = state.attributes[name] || {};
     var element = state.elements[name]; // arrow is optional + virtual elements
 
     if (!isHTMLElement(element) || !getNodeName(element)) {
-      return;
+        return;
     } // Flow doesn't support to extend this property, but it's the most
     // effective way to apply styles to an HTMLElement
     // $FlowFixMe[cannot-write]
@@ -163,74 +163,74 @@ function applyStyles(_ref) {
 
     Object.assign(element.style, style);
     Object.keys(attributes).forEach(function (name) {
-      var value = attributes[name];
+        var value = attributes[name];
 
-      if (value === false) {
-        element.removeAttribute(name);
-      } else {
-        element.setAttribute(name, value === true ? '' : value);
-      }
+            if (value === false) {
+                element.removeAttribute(name);
+            } else {
+                element.setAttribute(name, value === true ? '' : value);
+            }
+        });
     });
-  });
 }
 
 function effect(_ref2) {
-  var state = _ref2.state;
-  var initialStyles = {
+var state = _ref2.state;
+var initialStyles = {
     popper: {
-      position: state.options.strategy,
-      left: '0',
-      top: '0',
-      margin: '0'
+        position: state.options.strategy,
+        left: '0',
+        top: '0',
+        margin: '0'
     },
-    arrow: {
-      position: 'absolute'
-    },
-    reference: {}
-  };
-  Object.assign(state.elements.popper.style, initialStyles.popper);
-  state.styles = initialStyles;
+        arrow: {
+            position: 'absolute'
+        },
+        reference: {}
+    };
+    Object.assign(state.elements.popper.style, initialStyles.popper);
+    state.styles = initialStyles;
 
-  if (state.elements.arrow) {
-    Object.assign(state.elements.arrow.style, initialStyles.arrow);
-  }
+    if (state.elements.arrow) {
+        Object.assign(state.elements.arrow.style, initialStyles.arrow);
+    }
 
-  return function () {
+    return function () {
     Object.keys(state.elements).forEach(function (name) {
-      var element = state.elements[name];
-      var attributes = state.attributes[name] || {};
-      var styleProperties = Object.keys(state.styles.hasOwnProperty(name) ? state.styles[name] : initialStyles[name]); // Set all values to an empty string to unset them
+    var element = state.elements[name];
+    var attributes = state.attributes[name] || {};
+    var styleProperties = Object.keys(state.styles.hasOwnProperty(name) ? state.styles[name] : initialStyles[name]); // Set all values to an empty string to unset them
 
-      var style = styleProperties.reduce(function (style, property) {
+    var style = styleProperties.reduce(function (style, property) {
         style[property] = '';
         return style;
-      }, {}); // arrow is optional + virtual elements
+    }, {}); // arrow is optional + virtual elements
 
-      if (!isHTMLElement(element) || !getNodeName(element)) {
+    if (!isHTMLElement(element) || !getNodeName(element)) {
         return;
-      }
+    }
 
-      Object.assign(element.style, style);
-      Object.keys(attributes).forEach(function (attribute) {
+        Object.assign(element.style, style);
+        Object.keys(attributes).forEach(function (attribute) {
         element.removeAttribute(attribute);
-      });
     });
-  };
+});
+};
 } // eslint-disable-next-line import/no-unused-modules
 
 
 /* harmony default export */ var modifiers_applyStyles = ({
-  name: 'applyStyles',
-  enabled: true,
-  phase: 'write',
-  fn: applyStyles,
-  effect: effect,
-  requires: ['computeStyles']
+    name: 'applyStyles',
+    enabled: true,
+    phase: 'write',
+    fn: applyStyles,
+    effect: effect,
+    requires: ['computeStyles']
 });
 ;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/utils/getBasePlacement.js
 
 function getBasePlacement(placement) {
-  return placement.split('-')[0];
+    return placement.split('-')[0];
 }
 ;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/utils/math.js
 var math_max = Math.max;
@@ -238,20 +238,20 @@ var math_min = Math.min;
 var round = Math.round;
 ;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/utils/userAgent.js
 function getUAString() {
-  var uaData = navigator.userAgentData;
+    var uaData = navigator.userAgentData;
 
-  if (uaData != null && uaData.brands) {
-    return uaData.brands.map(function (item) {
-      return item.brand + "/" + item.version;
-    }).join(' ');
-  }
+    if (uaData != null && uaData.brands) {
+        return uaData.brands.map(function (item) {
+            return item.brand + "/" + item.version;
+        }).join(' ');
+    }
 
-  return navigator.userAgent;
+    return navigator.userAgent;
 }
 ;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/dom-utils/isLayoutViewport.js
 
 function isLayoutViewport() {
-  return !/^((?!chrome|android).)*safari/i.test(getUAString());
+    return !/^((?!chrome|android).)*safari/i.test(getUAString());
 }
 ;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/dom-utils/getBoundingClientRect.js
 
@@ -259,41 +259,41 @@ function isLayoutViewport() {
 
 
 function getBoundingClientRect(element, includeScale, isFixedStrategy) {
-  if (includeScale === void 0) {
-    includeScale = false;
-  }
+    if (includeScale === void 0) {
+        includeScale = false;
+    }
 
-  if (isFixedStrategy === void 0) {
-    isFixedStrategy = false;
-  }
+    if (isFixedStrategy === void 0) {
+        isFixedStrategy = false;
+    }
 
-  var clientRect = element.getBoundingClientRect();
-  var scaleX = 1;
-  var scaleY = 1;
+    var clientRect = element.getBoundingClientRect();
+    var scaleX = 1;
+    var scaleY = 1;
 
-  if (includeScale && isHTMLElement(element)) {
+    if (includeScale && isHTMLElement(element)) {
     scaleX = element.offsetWidth > 0 ? round(clientRect.width) / element.offsetWidth || 1 : 1;
     scaleY = element.offsetHeight > 0 ? round(clientRect.height) / element.offsetHeight || 1 : 1;
-  }
+    }
 
-  var _ref = isElement(element) ? getWindow(element) : window,
-      visualViewport = _ref.visualViewport;
+    var _ref = isElement(element) ? getWindow(element) : window,
+        visualViewport = _ref.visualViewport;
 
-  var addVisualOffsets = !isLayoutViewport() && isFixedStrategy;
-  var x = (clientRect.left + (addVisualOffsets && visualViewport ? visualViewport.offsetLeft : 0)) / scaleX;
-  var y = (clientRect.top + (addVisualOffsets && visualViewport ? visualViewport.offsetTop : 0)) / scaleY;
-  var width = clientRect.width / scaleX;
-  var height = clientRect.height / scaleY;
-  return {
-    width: width,
-    height: height,
-    top: y,
-    right: x + width,
-    bottom: y + height,
-    left: x,
-    x: x,
-    y: y
-  };
+    var addVisualOffsets = !isLayoutViewport() && isFixedStrategy;
+    var x = (clientRect.left + (addVisualOffsets && visualViewport ? visualViewport.offsetLeft : 0)) / scaleX;
+    var y = (clientRect.top + (addVisualOffsets && visualViewport ? visualViewport.offsetTop : 0)) / scaleY;
+    var width = clientRect.width / scaleX;
+    var height = clientRect.height / scaleY;
+    return {
+        width: width,
+        height: height,
+        top: y,
+        right: x + width,
+        bottom: y + height,
+        left: x,
+        x: x,
+        y: y
+    };
 }
 ;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/dom-utils/getLayoutRect.js
  // Returns the layout rect of an element relative to its offsetParent. Layout
@@ -303,66 +303,69 @@ function getLayoutRect(element) {
   var clientRect = getBoundingClientRect(element); // Use the clientRect sizes if it's not been transformed.
   // Fixes https://github.com/popperjs/popper-core/issues/1223
 
-  var width = element.offsetWidth;
-  var height = element.offsetHeight;
+    var width = element.offsetWidth;
+    var height = element.offsetHeight;
 
-  if (Math.abs(clientRect.width - width) <= 1) {
-    width = clientRect.width;
-  }
+    if (Math.abs(clientRect.width - width) <= 1) {
+        width = clientRect.width;
+    }
 
-  if (Math.abs(clientRect.height - height) <= 1) {
-    height = clientRect.height;
-  }
+    if (Math.abs(clientRect.height - height) <= 1) {
+        height = clientRect.height;
+    }
 
-  return {
-    x: element.offsetLeft,
-    y: element.offsetTop,
-    width: width,
-    height: height
-  };
+    return {
+        x: element.offsetLeft,
+        y: element.offsetTop,
+        width: width,
+        height: height
+    };
 }
 ;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/dom-utils/contains.js
 
 function contains(parent, child) {
-  var rootNode = child.getRootNode && child.getRootNode(); // First, attempt with faster native method
+    var rootNode = child.getRootNode && child.getRootNode(); // First, attempt with faster native method
 
-  if (parent.contains(child)) {
-    return true;
-  } // then fallback to custom implementation with Shadow DOM support
-  else if (rootNode && isShadowRoot(rootNode)) {
-      var next = child;
+    if (parent.contains(child)) {
+        return true;
+    } // then fallback to custom implementation with Shadow DOM support
+    else if (rootNode && isShadowRoot(rootNode)) {
+        var next = child;
 
-      do {
-        if (next && parent.isSameNode(next)) {
-          return true;
-        } // $FlowFixMe[prop-missing]: need a better way to handle this...
-
-
-        next = next.parentNode || next.host;
-      } while (next);
-    } // Give up, the result is false
+        do {
+            if (next && parent.isSameNode(next)) {
+            return true;
+            } // $FlowFixMe[prop-missing]: need a better way to handle this...
 
 
-  return false;
-}
-;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/dom-utils/getComputedStyle.js
+            next = next.parentNode || next.host;
+        } while (next);
+        } // Give up, the result is false
+
+
+    return false;
+};
+
+// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/dom-utils/getComputedStyle.js
 
 function getComputedStyle(element) {
-  return getWindow(element).getComputedStyle(element);
-}
-;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/dom-utils/isTableElement.js
+    return getWindow(element).getComputedStyle(element);
+};
+
+// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/dom-utils/isTableElement.js
 
 function isTableElement(element) {
-  return ['table', 'td', 'th'].indexOf(getNodeName(element)) >= 0;
-}
-;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/dom-utils/getDocumentElement.js
+    return ['table', 'td', 'th'].indexOf(getNodeName(element)) >= 0;
+};
+
+// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/dom-utils/getDocumentElement.js
 
 function getDocumentElement(element) {
   // $FlowFixMe[incompatible-return]: assume body is always available
-  return ((isElement(element) ? element.ownerDocument : // $FlowFixMe[prop-missing]
-  element.document) || window.document).documentElement;
-}
-;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/dom-utils/getParentNode.js
+    return ((isElement(element) ? element.ownerDocument : // $FlowFixMe[prop-missing]
+    element.document) || window.document).documentElement;
+};
+// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/dom-utils/getParentNode.js
 
 
 
