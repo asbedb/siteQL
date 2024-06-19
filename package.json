@@ -1,14 +1,11 @@
 {
-    "name": "devfolio",
+    "name": "siteQL",
     "version": "1.0.0",
-    "description": "a simple dev portfolio management site built with node",
+    "description": "a simple SQL web app installer",
     "scripts": {
-        "start": "node compile.js",
-        "css": "npx tailwindcss -i tailwind/input.css -o www/css/theme.css"
+        "start": "node compile.js"
     },
     "dependencies": {
-        "child_process": "^1.0.2",
-        "flowbite": "^2.2.1",
-        "tailwindcss": "^3.4.0"
+        "child_process": "^1.0.2"
     }
 }
