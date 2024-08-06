@@ -9,7 +9,7 @@ addEventListener("DOMContentLoaded", () => {
     const formContainer = document.getElementById('form-container');
     const btnContinue = document.getElementById('btn-continue');
     let currentStep = 0; 
-
+    //Site HTML and Form Object
     const installerObJ ={
         headings: [
             "<h1>Welcome to the siteQL Installer</h1>",
@@ -129,15 +129,11 @@ addEventListener("DOMContentLoaded", () => {
             </form>`
         ]
     }
-
-    btnContinue.addEventListener("click", nextStep);
-
-    siteInitialLoad();
-
     //image upload variables
     let profilePictureFile = null;
     let siteLogoFile = null;
     //Form Event Handler
+    siteInitialLoad();
     formContainer.addEventListener('click', (event) => {
         if (event.target.matches('#connection-save')) {
             updateDBConfig();
@@ -151,14 +147,14 @@ addEventListener("DOMContentLoaded", () => {
             finishInstallation();
         }
     });
-
+    btnContinue.addEventListener("click", nextStep);
     //Site Form Array Object
     function siteInitialLoad(){
         formTitle.innerHTML = installerObJ.headings[currentStep];
         formContainer.innerHTML = installerObJ.formHTML[currentStep];
         console.log("Hello There! Thanks for Checking this out make sure to go to the github for more information :)");
     }
-
+    //Moves through object
     function nextStep(){
         if(currentStep < installerObJ.headings.length - 1){
             currentStep += 1;
@@ -169,7 +165,6 @@ addEventListener("DOMContentLoaded", () => {
             console.log("nope");
         }
     }
-
     //Function call to update the SQL Config
     function updateDBConfig() {
         // Get form data
@@ -225,7 +220,6 @@ addEventListener("DOMContentLoaded", () => {
         // Send form data to the server
         xhr.send(formData);
     }
-
     //function call to update the credentials input
     function updateCredentials(){
         const formData = new FormData(document.getElementById("credentials-form"));
@@ -276,7 +270,6 @@ addEventListener("DOMContentLoaded", () => {
         // Send form data to the server
         xhr.send(formData);
     }
-
     //function call to update the about input
     function updateAbout(){
         const formData = new FormData(document.getElementById("about-form"));
@@ -318,7 +311,6 @@ addEventListener("DOMContentLoaded", () => {
         // Send form data to the server
         xhr.send(formData);
     }
-
     //function call to disable password input for SQL Config
     function blankPass(){
         var bCheck = document.getElementById("blank-pass");
@@ -330,7 +322,6 @@ addEventListener("DOMContentLoaded", () => {
             scpbox.disabled = false;
         }
     }
-
     //function to update the image preview when uploading images
     function previewImage(inputId, previewId) {
         const input = document.getElementById(inputId);
@@ -347,7 +338,6 @@ addEventListener("DOMContentLoaded", () => {
             }
         }
     }
-
     //function to reload elements after an upload
     function reloadElements() {
         var profilePicturePreview = document.getElementById('profile_picture_preview');
@@ -357,7 +347,6 @@ addEventListener("DOMContentLoaded", () => {
         siteLogoInput.src = siteLogoInput.src;
         siteLogoPreview.src = siteLogoPreview.src;
     }
-
     //function to upload an image
     function uploadImage(profilePictureFile, siteLogoFile) {
         const formData = new FormData(document.getElementById("picture-upload"));
@@ -389,7 +378,6 @@ addEventListener("DOMContentLoaded", () => {
             //console.error('Error uploading files:', error.message);
         });
     }
-
     function finishInstallation() {
         // Create a new XMLHttpRequest object
         var xhr = new XMLHttpRequest();
@@ -427,7 +415,4 @@ addEventListener("DOMContentLoaded", () => {
         // Send the AJAX request
         xhr.send();
     }
-
-
-
 });
