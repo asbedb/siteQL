@@ -7,168 +7,23 @@
         <link rel='preconnect' href='https://fonts.googleapis.com'>
         <link href='https://fonts.googleapis.com/css2?family=Poppins&display=swap' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="css/styles.css"/>
-        <!-- Include Your Custom JavaScript File -->
-        <script src="js/install.js" defer></script>
+
     </head>
     <body>
         <!-- Welcome Screen -->
         <div id="step-1" class="card">
-            <div class="card-content">
+            <div class="card-content" id="main-form">
                 <img src="img/dev_logo.png" alt="logo" class="logo"  /><br>
-                <h1>Welcome to the siteQL Installer</h1>
-                <p>For Documentation Check-out the GitHub Page</p>
-                <div>
-                    <button onclick="nextStep()">
-                        <span>
-                            Continue
-                        </span>
-                    </button>
-                    <a href="https://github.com/asbedb/siteQL" target=”_blank”>
-                        <button>
-                            GitHub
-                        </button>
-                    </a>
-                </div>
+                <div id="form-title"></div>
+                <div id="form-container"></div>
+                <button id="btn-continue">
+                    <span>
+                        Continue
+                    </span>
+                </button>
             </div>
         </div>
-        <!-- SQL Setup Form -->
-        <div id="step-2" class="card hidden">
-            <div class="card-content">
-                <img src="img/dev_logo.png" alt="siteQL dev_logo" class="logo" /><br>
-                <h3>Start With Your SQL Node Information</h3>
-                <form id="database-form" name="database-form" action="javascript:void(0);">
-                    <div class="form-row">
-                        <label for="sql-host">Host</label>
-                        <input type="text" id="sql-host" name="sql-host"placeholder="Default: localhost" >
-                    </div>
-                    <div class="form-row">
-                        <label for="sql-user">User</label>
-                        <input type="text" id="sql-user" name="sql-user" placeholder="Default: root">
-                    </div>
-                    <div class="form-row">
-                        <label for="sql-dbname">DB Name</label>
-                        <input type="text" id="sql-dbname" name="sql-dbname" placeholder="Default: siteQL">
-                    </div>
-                    <div class="form-row">
-                        <label for="sql-password">Password</label>
-                        <input type="password" id="sql-password" name="sql-password">
-                    </div>
-                    <div class="form-row">
-                        <label for="sql-confirmpassword">Confirm Password</label>
-                        <input type="password" id="sql-confirmpassword" name="sql-confirmpassword">
-                    </div>
-                    <div class="form-row">
-                    <label for="blank-pass">Passsword for SQL Server is Blank (DevOps)</label>
-                        <input onclick="blankPass()" id="blank-pass" name="blank-pass" class="checkmark" type="checkbox" value="">
-                    </div>
-                    <button onclick="updateDBConfig()" id="connection-save" name="connection-save">
-                        Save Details
-                    </button>
-                    <button onclick="nextStep()">
-                        <span>
-                            Continue
-                        </span>
-                    </button>
-                </form>
-            </div>
-        </div>
-        <!-- Credentials -->
-        <div id="step-3" class="card hidden">
-            <div class="card-content">
-                <img src="img/dev_logo.png" alt="siteQL dev_logo" class="logo" /><br>                
-                <h3>Let's Setup Some Credentials</h3>
-                <form id="credentials-form" name="credentials-form" action="javascript:void(0);">
-                    <div class="form-row">
-                        <label for="user-full-name">Full Name</label>
-                        <input type="text" id="user-full-name" name="user-full-name">
-                    </div>
-                    <div class="form-row">
-                        <label for="user-email">Email</label>
-                        <input type="email" id="user-email" name="user-email" placeholder="name@email.com">
-                    </div>
-                    <div class="form-row">
-                        <label for="user-password">Password</label>
-                        <input type="password" id="user-password" name="user-password">
-                    </div>
-                    <div class="form-row">
-                        <label for="user-confirmpassword">Confirm Password</label>
-                        <input type="password" id="user-confirmpassword" name="user-confirmpassword">
-                    </div>
-                    <button onclick="updateCredentials()" type="button" id="credentials-save" name="credentials-save" >
-                        Save Details
-                    </button>
-                    <button onclick="nextStep()" >
-                        <span>
-                            Continue
-                        </span>
-                    </button>
-                </form>
-            </div>
-        </div>
-        <!-- About You -->
-        <div id="step-4" class="card hidden">
-            <div class="card-content">
-                <img src="img/dev_logo.png" alt="siteQL dev_logo" class="logo" /><br>
-                <h3>
-                Some Information About You</h3>
-                <form id="about-form" name="about-form" action="javascript:void(0);">
-                    <div class="form-row">
-                        <label for="user-location">Location</label>
-                        <input type="text" id="user-location" name="user-location" required>
-                    </div>
-                    <div class="form-row">
-                        <label for="user-ptitle">Professional Title</label>
-                        <input type="text" id="user-ptitle" name="user-ptitle" required>
-                    </div>
-                    <div class="form-row">
-                        <label for="user-sitetitle">Site Title/Name</label>
-                        <input type="text" id="user-sitetitle" name="user-sitetitle" required>
-                    </div>
-                    <div class="form-row">
-                        <label for="user-aboutme">About You</label>
-                        <textarea id="user-aboutme" name="user-aboutme" rows="4" placeholder="Leave a comment..."></textarea>
-                    </div>
-                    <button onclick="updateAbout()" type="button" id="about-save" name="about-save" >
-                        Save Details
-                    </button>
-                    <button onclick="nextStep()">
-                        <span>
-                            Continue
-                        </span>
-                    </button>
-                </form>        
-            </div>
-        </div>
-        <!-- Profile Picture -->
-        <div id="step-5" class="card hidden">
-            <div class="card-content">
-                <img src="img/dev_logo.png" alt="siteQL dev_logo" class="logo" /><br>
-                <h3>Upload Brand Images</h3>
-                <form id="picture-upload" name="picture-upload" onsubmit="return false;">     
-                    <div class="form-row">
-                        <label for="profile-picture">Profile Picture</label>
-                        <img name="profile_picture_preview" id="profile_picture_preview" src="img/pfp.png" alt="Profile Picture"/>
-                        <div class="form-row">
-                            <input  onchange="previewImage('profile-picture-button', 'profile_picture_preview')" name="profile-picture-button" id="profile-picture-button" aria-describedby="user_avatar_help" id="user_avatar" type="file" accept="image/*">
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <label for="site-logo">Site Logo</label>
-                        <img name="site_logo_preview" id="site_logo_preview" src="img/site_logo.png" alt="site-logo"/>
-                        <div class="form-row">
-                            <input onchange="previewImage('site-logo-button', 'site_logo_preview')" name="site-logo-button" id="site-logo-button" aria-describedby="user_avatar_help" id="user_avatar" type="file" accept="image/*">
-                        </div>
-                    </div>
-                    <button onclick="uploadImage()">
-                        Upload
-                    </button>
-                    <button onclick="finishInstallation()">
-                        <span>
-                            Finish Installation
-                        </span>
-                    </button>
-                </form>
-            </div>
-        </div>
+        <!-- Include Your Custom JavaScript File -->
+        <script src="js/install.js" defer></script>
     </body>
 </html>
