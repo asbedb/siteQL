@@ -60,7 +60,7 @@ function SqlNodeInformation({ connectCreateDB, error, successMessage }: SqlNodeI
             setPassword('');
             setConfirmPassword('');
         }
-    }, [error]); // Run effect when `error` changes
+    }, [error]);
 
     return (
         <div className='p-12'>

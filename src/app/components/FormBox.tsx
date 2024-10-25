@@ -85,23 +85,35 @@ export default function FormBox() {
             }
         }
     };
-    //Upload Images
-    const uploadPfpImages = async({sitePfp, userPfp}: uploadPfpImageParams) => {
+    // Upload Images
+    const uploadPfpImages = async ({ sitePfp, userPfp }: uploadPfpImageParams) => {
+        const formData = new FormData();
+        
+        // Append files to FormData
+        if (sitePfp) formData.append('sitePfp', sitePfp);
+        if (userPfp) formData.append('userPfp', userPfp);
+        
         try {
-            const response = await fetch('/api/connections/updateDatabase', {
+            // Make the POST request to upload the images
+            const response = await fetch('/api/config/imageUploader', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ sitePfp, userPfp }),
+                body: formData,
             });
+
+            // Parse the response
             const result = await response.json();
+            
+            // Check if the response was successful
             if (response.ok) {
-                setSuccessMessage('Profile Updated'); 
+                setSuccessMessage('Profile Updated');
+                return result; // Return the result if needed
             } else {
                 throw new Error(result.error || 'Update Failed');
             }
         } catch (error) {
+            // Handle errors
             if (error instanceof Error) {
-                setErrorMessage(error.message); 
+                setErrorMessage(error.message);
             } else {
                 setErrorMessage('An unknown error occurred.');
             }
