@@ -11,6 +11,7 @@ const Toast: React.FC<ToastProps> = ({ message, isOpen, onClose }) => {
                 isOpen={isOpen} 
                 placement='bottom'
                 onOpenChange={onClose} 
+                className="text-foreground"
             >
                 <ModalContent>
                     {(onClose) => (

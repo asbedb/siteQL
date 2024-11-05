@@ -148,14 +148,15 @@ export default function FormBox() {
     };
 
     return(
-        <>
+        <div className="p-20 h-screen">
             <div className="grid grid-cols-1 
                 grid-rows-10 
                 w-full 
                 h-full 
                 items-center 
                 text-center 
-                rounded-lg bg-primary">
+                rounded-xl 
+                bg-primary-100">
                     <div className="flex flex-col items-center justify-center row-span-2">    
                         <Logo/>
                     </div>
@@ -169,6 +170,6 @@ export default function FormBox() {
                         </div>
                     </div>
             </div>
-        </>
+        </div>
     )
 }

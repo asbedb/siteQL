@@ -1,25 +1,41 @@
 // app/components/ThemeSwitcher.tsx
 "use client";
 
-import {useTheme} from "next-themes";
+import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
-import { Button } from "@nextui-org/react";
+import { Switch } from "@nextui-org/react";
+import { FaSun, FaMoon } from "react-icons/fa6";
 
 export function ThemeSwitcher() {
-    const [mounted, setMounted] = useState(false)
-    const { theme, setTheme } = useTheme()
+    const [mounted, setMounted] = useState(false);
+    const { theme, setTheme } = useTheme();
 
     useEffect(() => {
-        setMounted(true)
-    }, [])
+        setMounted(true);
+    }, []);
 
-    if(!mounted) return null
+    if (!mounted) return null;
+
+    const handleThemeChange = (isSelected: boolean) => {
+        setTheme(isSelected ? "light" : "dark");
+    };
 
     return (
-        <div>
-            The current theme is: {theme}
-            <Button onClick={() => setTheme('light')}>Light Mode</Button>
-            <Button onClick={() => setTheme('dark')}>Dark Mode</Button>
+        <div className="text-foreground">
+            <Switch 
+                isSelected={theme === "light"}
+                size="lg"
+                color="secondary"
+                onChange={(e) => handleThemeChange(e.target.checked)}
+                thumbIcon={({ isSelected, className }) =>
+                    isSelected ? (
+                        <FaSun className={className} />
+                    ) : (
+                        <FaMoon className={className} />
+                    )
+                }
+            >
+            </Switch>
         </div>
-    )
-};
+    );
+}
