@@ -22,6 +22,12 @@ export interface updateSiteParams {
     aboutApp: string;
 }
 
+export interface loginCredentialsParams {
+    email: string;
+    userPassword: string;
+}
+
+
 //PROPS
 export interface uploadImagesProps{
     uploadPfpImages: (data: { userPfp: string; sitePfp: string;}) => Promise<void>;
@@ -33,12 +39,12 @@ export interface SqlNodeInformationProps {
     error: string;
     successMessage: string;
 }
-
 export interface UpdateCredentialsProps {
     updateCredentials: (data: { fullName: string; email: string; password: string; }) => Promise<void>;
     error: string;
     successMessage: string;
 }
+
 export interface updateSiteInformationProps {
     updateSiteInformation: (data: { location: string; appName: string; aboutApp: string; }) => Promise<void>;
     error: string;

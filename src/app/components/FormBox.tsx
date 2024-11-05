@@ -99,10 +99,8 @@ export default function FormBox() {
                 method: 'POST',
                 body: formData,
             });
-
             // Parse the response
-            const result = await response.json();
-            
+            const result = await response.json();        
             // Check if the response was successful
             if (response.ok) {
                 setSuccessMessage('Profile Updated');
