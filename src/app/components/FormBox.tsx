@@ -8,6 +8,7 @@ import SqlNodeInformation from './SqlNodeInformation';
 import CredentialsInformation from './CredentialsInformation';
 import SiteInformation from './SiteInformation';
 import PfpImage from './PfpImage';
+import CustomTable from "./CustomTable";
 
 export default function FormBox() {
     const [step, setStep] = useState<number>(1);
@@ -15,7 +16,7 @@ export default function FormBox() {
     const [successMessage, setSuccessMessage] = useState<string>('');
     //stephandler
     const handleNext = () => {
-        if(step<5)setStep(step+1)
+        if(step<6)setStep(step+1)
     };
     const handlePrevious = () => {
         if(step>1)setStep(step - 1)};
@@ -142,6 +143,8 @@ export default function FormBox() {
                             uploadPfpImages={uploadPfpImages}
                             error={errorMessage}
                             successMessage={successMessage}/>;
+            case 6:
+                return <CustomTable/>;
             default:
                 return <IntroductionStep/>;
         }
