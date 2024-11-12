@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Input, Button, Select, SelectItem, SelectSection, Tooltip } from '@nextui-org/react';
+import { Input, Button, Tooltip, Select, SelectItem, SelectSection } from '@nextui-org/react';
 
 const CustomTable: React.FC = () => {
     const [data, setData] = useState([
@@ -94,14 +94,16 @@ const CustomTable: React.FC = () => {
         { id: 'column4', name: 'Column 4', inputType: 'text' },
     ]);
 
+    // Handle changes to column names
     const handleColumnNameChange = (columnId: string, value: string) => {
         setColumns(prevColumns =>
             prevColumns.map(column =>
-                column.id === columnId ? { ...column, name: value } : column 
+                column.id === columnId ? { ...column, name: value } : column
             )
         );
     };
 
+    // Handle input changes for table data
     const handleInputChange = (rowId: number, columnId: string, value: string) => {
         setData(prevData =>
             prevData.map(row =>
@@ -110,6 +112,7 @@ const CustomTable: React.FC = () => {
         );
     };
 
+    // Remove a column from the table
     const removeColumn = (columnId: string) => {
         setColumns(prevColumns => prevColumns.filter(column => column.id !== columnId));
         setData(prevData => prevData.map(row => {
@@ -118,58 +121,51 @@ const CustomTable: React.FC = () => {
         }));
     };
 
-    const handleTypeChange = (columnId, value) => {
-        setColumns(prevColumns =>
-            prevColumns.map(column =>
-                column.id === columnId ? { ...column, type: value } : column
-            )
-        );
-    };
-
     return (
-        <div className="border border-background rounded-lg mx-4">
-            <div id='table-name'>
+        <div className="border border-background rounded-lg mx-4 p-4">
+            <div id="table-name" className="mb-4">
                 <Input
-                    label='Enter Table Name'
-                    aria-label='Table Name:'
+                    label="Enter Table Name"
+                    aria-label="Table Name:"
                 />
             </div>
-            <div className={`grid ${columns.length > 1 ? `grid-cols-${columns.length} 1fr` : "bg-danger"}`} id='table-header'>
-                {columns.map((column) => (
-                    column.id == 'id'?
-                    <div key={column.id} className="p-2 bg-primary-200">
-                        <h1>ID (Default for Table)</h1>
-                    </div>:
-                    <div key={column.id} className="p-2 bg-primary-200">
-                        <div className="flex items-center gap-2">
-                            <Input
-                                label={column.name}
-                                onChange={(e) => handleColumnNameChange(column.id, e.target.value)}
-                                aria-label={`Column Name: ${column.name}`}
-                            />
-                            <Tooltip content="Remove Column">
-                                <Button
-                                    className="rounded-lg bg-danger text-white"
-                                    size="sm"
-                                    onClick={() => removeColumn(column.id)}
-                                >
-                                    -
-                                </Button>
-                            </Tooltip>
-                        </div>
-                    </div>
-                ))}
-                {/* Table Rows */}
-                {columns.map((column) => (
-                    <div 
-                        key={column.id} 
-                        className={`grid ${columns.length > 1 ? `1fr w-full` : ""}`} id='table-row' 
-                    >
-                        {column.id == 'id'?
-                            <div key={`type-${column.id}`} className="flex items-center gap-2 p-2">
-                                INT/INTEGER AUTOINCREMENT (Default)
-                            </div>:
-                            <div key={`type-${column.id}`} className="flex items-center gap-2 p-2">
+            <table className="min-w-full table-auto border p-4">
+                <thead>
+                    <tr>
+                        {columns.map((column) => (
+                            <th key={column.id} className="p-4 bg-primary-200 text-foreground">
+                                <div className="flex gap-1 items-center">
+                                    {column.id === 'id' ? (
+                                        <span>ID (Default - Key)</span>
+                                    ) : (
+                                        <>
+                                            <Input
+                                                label={column.name}
+                                                onChange={(e) => handleColumnNameChange(column.id, e.target.value)}
+                                                aria-label={`Column Name: ${column.name}`}
+                                            />
+                                            <Tooltip content="Remove Column">
+                                                <Button
+                                                    className="rounded-lg bg-danger text-white"
+                                                    onClick={() => removeColumn(column.id)}
+                                                >
+                                                    -
+                                                </Button>
+                                            </Tooltip>
+                                        </>
+                                    )}
+                                </div>
+                            </th>
+                        ))}
+                    </tr>
+                </thead>
+                <tbody>
+                    {columns.map((column)=>(
+                        <td key={column.id}>
+                            {column.id === 'id' ?
+                                <span className="flex items-center gap-2 p-2">
+                                    INT/INTEGER AUTOINCREMENT (Default)
+                                </span> :
                                 <Select className="w-full" label="Data Type">
                                     {sqlTypes.map((category) => (
                                         <SelectSection
@@ -177,19 +173,19 @@ const CustomTable: React.FC = () => {
                                             key={category.category}
                                             className='sticky bg-default-100 shadow-small rounded-small text-foreground'
                                         >
-                                                {category.types.map((type) => (
-                                                    <SelectItem key={type.name}>{type.name}</SelectItem>
-                                                ))}
+                                            {category.types.map((type) => (
+                                                <SelectItem key={type.name}>{type.name}</SelectItem>
+                                            ))}
                                         </SelectSection>
                                     ))}
-                                </Select>  
-                            </div> 
-                        }
-                    </div>
-                ))}
-            </div>
+                                </Select>
+                            }
+                        </td>
+                    ))}
+                </tbody>
+            </table>
         </div>
-    )
+    );
 };
 
 export default CustomTable;
