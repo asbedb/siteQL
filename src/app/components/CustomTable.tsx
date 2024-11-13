@@ -8,15 +8,16 @@ const CustomTable: React.FC = () => {
         {
             category: 'Numeric',
             types: [
-                { name: 'TINYINT', description: 'Exact numeric, -128 to 127', size: '1 byte' },
-                { name: 'SMALLINT', description: 'Exact numeric, -32,768 to 32,767', size: '2 bytes' },
-                { name: 'MEDIUMINT', description: 'Exact numeric, -8,388,608 to 8,388,607', size: '3 bytes' },
-                { name: 'INT/INTEGER', description: 'Exact numeric, -2,147,483,648 to 2,147,483,647', size: '4 bytes' },
-                { name: 'BIGINT', description: 'Exact numeric, -9,223,372,036,854,775,808 to 9,223,372,036,854,775,807', size: '8 bytes' },
-                { name: 'DECIMAL(p,s)/NUMERIC', description: 'Exact numeric, precision p and scale s', size: 'Variable' },
-                { name: 'FLOAT', description: 'Approximate numeric, mantissa precision 23', size: '4 bytes' },
-                { name: 'DOUBLE', description: 'Approximate numeric, mantissa precision 53', size: '8 bytes' },
-                { name: 'BIT', description: 'Bit value type', size: 'Variable' }
+                { name: 'TINYINT' },
+                { name: 'SMALLINT' },
+                { name: 'MEDIUMINT' },
+                { name: 'INT' },
+                { name: 'BIGINT' },
+                { name: 'DECIMAL' },  // Adjust precision/scale when using, e.g., 'DECIMAL(10,2)'
+                { name: 'NUMERIC' },  // Also supports (precision, scale)
+                { name: 'FLOAT' },
+                { name: 'DOUBLE' },
+                { name: 'BIT' }       // Size can vary, e.g., 'BIT(1)'
             ]
         },
     
@@ -24,14 +25,14 @@ const CustomTable: React.FC = () => {
         {
             category: 'String',
             types: [
-                { name: 'CHAR', description: 'Fixed-length character string', size: '1-255 chars' },
-                { name: 'VARCHAR', description: 'Variable-length character string', size: '1-65,535 chars' },
-                { name: 'TINYTEXT', description: 'Variable-length string', size: '255 chars max' },
-                { name: 'TEXT', description: 'Variable-length string', size: '65,535 chars max' },
-                { name: 'MEDIUMTEXT', description: 'Variable-length string', size: '16,777,215 chars max' },
-                { name: 'LONGTEXT', description: 'Variable-length string', size: '4,294,967,295 chars max' },
-                { name: 'ENUM', description: 'String object with only one value from a list', size: '1 or 2 bytes' },
-                { name: 'SET', description: 'String object that can have 0 or more values from a list', size: '1-8 bytes' }
+                { name: 'CHAR' },         // Define length, e.g., 'CHAR(255)'
+                { name: 'VARCHAR' },      // Define length, e.g., 'VARCHAR(255)'
+                { name: 'TINYTEXT' },
+                { name: 'TEXT' },
+                { name: 'MEDIUMTEXT' },
+                { name: 'LONGTEXT' },
+                { name: 'ENUM' },         // Specify values, e.g., 'ENUM("value1", "value2")'
+                { name: 'SET' }           // Specify set values, e.g., 'SET("value1", "value2")'
             ]
         },
     
@@ -39,11 +40,11 @@ const CustomTable: React.FC = () => {
         {
             category: 'Date and Time',
             types: [
-                { name: 'DATE', description: 'Date value (YYYY-MM-DD)', size: '3 bytes' },
-                { name: 'TIME', description: 'Time value (HH:MM:SS)', size: '3 bytes' },
-                { name: 'DATETIME', description: 'Date and time value (YYYY-MM-DD HH:MM:SS)', size: '8 bytes' },
-                { name: 'TIMESTAMP', description: 'Timestamp value (YYYY-MM-DD HH:MM:SS)', size: '4 bytes' },
-                { name: 'YEAR', description: 'Year value (YYYY)', size: '1 byte' }
+                { name: 'DATE' },
+                { name: 'TIME' },
+                { name: 'DATETIME' },
+                { name: 'TIMESTAMP' },
+                { name: 'YEAR' }
             ]
         },
     
@@ -51,12 +52,12 @@ const CustomTable: React.FC = () => {
         {
             category: 'Binary',
             types: [
-                { name: 'BINARY', description: 'Fixed-length binary string', size: '1-255 bytes' },
-                { name: 'VARBINARY', description: 'Variable-length binary string', size: '1-65,535 bytes' },
-                { name: 'TINYBLOB', description: 'Binary large object', size: '255 bytes max' },
-                { name: 'BLOB', description: 'Binary large object', size: '65,535 bytes max' },
-                { name: 'MEDIUMBLOB', description: 'Binary large object', size: '16,777,215 bytes max' },
-                { name: 'LONGBLOB', description: 'Binary large object', size: '4,294,967,295 bytes max' }
+                { name: 'BINARY' },       // Define length, e.g., 'BINARY(255)'
+                { name: 'VARBINARY' },    // Define length, e.g., 'VARBINARY(255)'
+                { name: 'TINYBLOB' },
+                { name: 'BLOB' },
+                { name: 'MEDIUMBLOB' },
+                { name: 'LONGBLOB' }
             ]
         },
     
@@ -64,33 +65,45 @@ const CustomTable: React.FC = () => {
         {
             category: 'Spatial',
             types: [
-                { name: 'GEOMETRY', description: 'Any type of geometry object' },
-                { name: 'POINT', description: 'A point in space' },
-                { name: 'LINESTRING', description: 'A curve with linear interpolation between points' },
-                { name: 'POLYGON', description: 'A polygon' },
-                { name: 'MULTIPOINT', description: 'Collection of points' },
-                { name: 'MULTILINESTRING', description: 'Collection of linestrings' },
-                { name: 'MULTIPOLYGON', description: 'Collection of polygons' },
-                { name: 'GEOMETRYCOLLECTION', description: 'Collection of geometry objects' }
+                { name: 'GEOMETRY' },
+                { name: 'POINT' },
+                { name: 'LINESTRING' },
+                { name: 'POLYGON' },
+                { name: 'MULTIPOINT' },
+                { name: 'MULTILINESTRING' },
+                { name: 'MULTIPOLYGON' },
+                { name: 'GEOMETRYCOLLECTION' }
             ]
         },
     
-        // JSON Type (Available in modern SQL databases)
+        // JSON Type
         {
             category: 'JSON',
             types: [
-                { name: 'JSON', description: 'Stores JSON (JavaScript Object Notation) data', size: 'Variable' }
+                { name: 'JSON' }
             ]
         }
     ];
+    
 
     const [columns, setColumns] = useState([
-        { id: 'id', name: 'ID (Default)', inputType: 'INT/INTEGER' },
+        { id: 'id', name: 'table_id', inputType: 'INT PRIMARY KEY' },
         { id: 'column2', name: 'Column 2', inputType: 'text' },
         { id: 'column3', name: 'Column 3', inputType: 'text' },
         { id: 'column4', name: 'Column 4', inputType: 'text' },
     ]);
 
+    const [tableName, setTableName] = useState(''); 
+    
+    const handleTypeChange = (columnName: string, newType: string) => {
+        setColumns(prevColumns =>
+            prevColumns.map(column =>
+                column.name === columnName
+                    ? { ...column, inputType: newType }
+                    : column
+            )
+        );
+    };
     // Handle changes to column names
     const handleColumnNameChange = (columnId: string, value: string) => {
         setColumns(prevColumns =>
@@ -110,6 +123,32 @@ const CustomTable: React.FC = () => {
         ]);
     };
 
+    const handleSubmit = async () => {
+        try {
+            const response = await fetch('/api/connections/createTable', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    tableName,
+                    columns: columns.map(column => ({
+                        name: column.name,
+                        type: column.inputType,
+                    })),
+                }),
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                alert(data.message || 'Table created successfully!');
+            } else {
+                alert(data.error || 'Error creating table.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred.');
+        }
+    };
+
     return (
         <div className="border border-background rounded-lg mx-4 p-4">
             <span className='text-xl font-bold'>Add a Custom Table:</span>
@@ -117,6 +156,7 @@ const CustomTable: React.FC = () => {
                 <Input
                     label="Enter Table Name"
                     aria-label="Table Name:"
+                    onChange={(e) => setTableName(e.target.value)}
                 />
             </div>
             <table className="min-w-full table-auto border p-4 mb-4">
@@ -158,7 +198,7 @@ const CustomTable: React.FC = () => {
                                     <span className="flex items-center gap-2 p-2">
                                         INT/INTEGER AUTOINCREMENT (Default)
                                     </span> :
-                                    <Select className="w-full p-2" label="Column Data Type">
+                                    <Select className="w-full p-2" label="Column Data Type" onChange={(e) => handleTypeChange(column.name, e.target.value)}>
                                         {sqlTypes.map((category) => (
                                             <SelectSection
                                                 title={category.category}
@@ -180,6 +220,11 @@ const CustomTable: React.FC = () => {
             <Button
                 onClick={() => addColumn(`column${columns.length + 1}`, `Column ${columns.length+1}`, 'text')}>
                     Add Column
+            </Button>
+            <Button
+                onClick={handleSubmit}
+                className='bg-success'>
+                    Create Table
             </Button>
         </div>
     );
