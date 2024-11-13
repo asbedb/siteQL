@@ -6,8 +6,8 @@ function IntroductionStep() {
     return (
         <>
         <div className='leading-snug p-10'>
-            <span className='text-4xl font-extrabold'>Welcome to SiteQL</span><br/><br/>
-            <span className='text-lg'>
+            <span className='text-2xl font-extrabold md:text-4xl'>Welcome to SiteQL</span><br/><br/>
+            <span className='text-md md:text-xl py-4'>
             SiteQL is a powerful SQL web application designed to streamline the process of building and deploying CRUD-based 
             web applications. 
             With SiteQL, users can automatically generate a SQL table structure and configure initial user 
