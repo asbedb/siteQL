@@ -2,9 +2,6 @@ import React, { useState } from 'react';
 import { Input, Button, Tooltip, Select, SelectItem, SelectSection } from '@nextui-org/react';
 
 const CustomTable: React.FC = () => {
-    const [data, setData] = useState([
-        { id: 1, column1: 'Row 1, Cell 1', column2: 'Row 1, Cell 2', column3: 'Row 1, Cell 3', column4: 'Row 1, Cell 4' }
-    ]);
 
     const sqlTypes = [
         // Numeric Types
@@ -102,88 +99,88 @@ const CustomTable: React.FC = () => {
             )
         );
     };
-
-    // Handle input changes for table data
-    const handleInputChange = (rowId: number, columnId: string, value: string) => {
-        setData(prevData =>
-            prevData.map(row =>
-                row.id === rowId ? { ...row, [columnId]: value } : row
-            )
-        );
-    };
-
     // Remove a column from the table
     const removeColumn = (columnId: string) => {
         setColumns(prevColumns => prevColumns.filter(column => column.id !== columnId));
-        setData(prevData => prevData.map(row => {
-            const { [columnId]: removed, ...rest } = row;
-            return rest;
-        }));
+    };
+    const addColumn = (id: string, name: string, inputType: string) => {
+        setColumns(prevColumns => [
+            ...prevColumns,
+            { id, name, inputType }
+        ]);
     };
 
     return (
         <div className="border border-background rounded-lg mx-4 p-4">
-            <div id="table-name" className="mb-4">
+            <span className='text-xl font-bold'>Add a Custom Table:</span>
+            <div id="table-name" className="my-4">
                 <Input
                     label="Enter Table Name"
                     aria-label="Table Name:"
                 />
             </div>
-            <table className="min-w-full table-auto border p-4">
+            <table className="min-w-full table-auto border p-4 mb-4">
                 <thead>
                     <tr>
                         {columns.map((column) => (
-                            <th key={column.id} className="p-4 bg-primary-200 text-foreground">
-                                <div className="flex gap-1 items-center">
-                                    {column.id === 'id' ? (
-                                        <span>ID (Default - Key)</span>
-                                    ) : (
-                                        <>
-                                            <Input
-                                                label={column.name}
-                                                onChange={(e) => handleColumnNameChange(column.id, e.target.value)}
-                                                aria-label={`Column Name: ${column.name}`}
-                                            />
-                                            <Tooltip content="Remove Column">
-                                                <Button
-                                                    className="rounded-lg bg-danger text-white"
-                                                    onClick={() => removeColumn(column.id)}
-                                                >
-                                                    -
-                                                </Button>
-                                            </Tooltip>
-                                        </>
-                                    )}
-                                </div>
-                            </th>
+                            <td key={column.id} className=" bg-primary-200 text-foreground">
+                                {column.id === 'id' ? (
+                                    <span>ID (Default - Key)</span>
+                                ) : (
+                                    <div className="">
+                                        <Input
+                                            label={`Column Name`}
+                                            onChange={(e) => handleColumnNameChange(column.id, e.target.value)}
+                                            aria-label={`Column Name: ${column.name}`}
+                                            className='w-full p-2'
+                                            endContent={
+                                                <Tooltip content="Remove Column">
+                                                    <Button
+                                                        className="rounded-lg bg-danger text-white"
+                                                        onClick={() => removeColumn(column.id)}
+                                                    >
+                                                        -
+                                                    </Button>
+                                                </Tooltip>
+                                            }
+                                        />
+                                    </div>
+                                )}
+                            </td>
                         ))}
                     </tr>
                 </thead>
                 <tbody>
-                    {columns.map((column)=>(
-                        <td key={column.id}>
-                            {column.id === 'id' ?
-                                <span className="flex items-center gap-2 p-2">
-                                    INT/INTEGER AUTOINCREMENT (Default)
-                                </span> :
-                                <Select className="w-full" label="Data Type">
-                                    {sqlTypes.map((category) => (
-                                        <SelectSection
-                                            title={category.category}
-                                            key={category.category}
-                                            className='sticky bg-default-100 shadow-small rounded-small text-foreground'
-                                        >
-                                            {category.types.map((type) => (
-                                                <SelectItem key={type.name}>{type.name}</SelectItem>
-                                            ))}
-                                        </SelectSection>
-                                    ))}
-                                </Select>
-                            }
-                        </td>
-                    ))}
+                    <tr>
+                        {columns.map((column)=>(
+                            <td key={column.id}>
+                                {column.id === 'id' ?
+                                    <span className="flex items-center gap-2 p-2">
+                                        INT/INTEGER AUTOINCREMENT (Default)
+                                    </span> :
+                                    <Select className="w-full p-2" label="Column Data Type">
+                                        {sqlTypes.map((category) => (
+                                            <SelectSection
+                                                title={category.category}
+                                                key={category.category}
+                                                className='sticky bg-default-100 shadow-small rounded-small text-foreground'
+                                            >
+                                                {category.types.map((type) => (
+                                                    <SelectItem key={type.name}>{type.name}</SelectItem>
+                                                ))}
+                                            </SelectSection>
+                                        ))}
+                                    </Select>
+                                }
+                            </td>
+                        ))}
+                    </tr>
                 </tbody>
             </table>
+            <Button
+                onClick={() => addColumn(`column${columns.length + 1}`, `Column ${columns.length+1}`, 'text')}>
+                    Add Column
+            </Button>
         </div>
     );
 };
