@@ -1,4 +1,3 @@
-
 // src/app/api/connections/checkInstallation/route.ts
 import { NextResponse } from 'next/server';
 
