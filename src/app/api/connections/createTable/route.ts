@@ -1,11 +1,13 @@
 import { NextResponse, NextRequest } from 'next/server';
 import mysql from 'mysql2/promise'; 
+import writeEnvFile from '../../config/envWriter/route';
 
 export async function POST(request: NextRequest) {
     const host = process.env.DB_HOST;
     const user = process.env.DB_USER;
     const password = process.env.DB_PASSWORD || '';
     const dbName = process.env.DB_NAME;
+    let custom_table = process.env.DB_CUSTOM_TABLE || '';
 
     if (!host || !user || !dbName) {
         return NextResponse.json({ error: 'Database connection details are missing' }, { status: 400 });
@@ -34,10 +36,15 @@ export async function POST(request: NextRequest) {
                 ${columnDefinitions}
             );
         `;
-
+        custom_table = custom_table
+            ? `${custom_table},${tableName}` // Append if custom_table is not empty
+            : tableName;
+            
         await connection.query(query);
+        await writeEnvFile({
+            DB_CUSTOM_TABLE: custom_table
+        });
         await connection.end(); // Close the connection
-
         return NextResponse.json({ message: 'Table created successfully!' });
     } catch (error) {
         if (error instanceof Error) {
