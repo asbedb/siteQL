@@ -1,12 +1,14 @@
 import React from 'react'
 import { ThemeSwitcher } from './ThemeSwitcher'
 import ServicePing from './ServicePing'
+import InstallPopover from './InstallPopover'
+
 
 function ServiceBar() {
     return (
         <div className='flex flex-row justify-between items-center p-4'>
             <div><ThemeSwitcher/></div>
-            <div><ServicePing/></div>
+            <div className='flex flex-row'><ServicePing/> <InstallPopover/></div>
         </div>
     )
 }
