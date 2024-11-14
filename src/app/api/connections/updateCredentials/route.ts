@@ -10,7 +10,6 @@ export async function POST(request: NextRequest) {
     const password = process.env.DB_PASSWORD || '';
     const dbName = process.env.DB_NAME;
     const tableName = process.env.DB_TABLE_NAME;
-    console.log(host, user, password, dbName, tableName);
     if (!host || !user || !dbName || !tableName) {
         return NextResponse.json({ error: 'Database connection details are missing' }, { status: 400 });
     }
