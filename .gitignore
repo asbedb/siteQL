@@ -1,5 +1,10 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+#public image repositories
+public/img/sitepfp/*
+public/img/uploads/*
+public/img/userpfp/*
+
 # dependencies
 .env
 /node_modules

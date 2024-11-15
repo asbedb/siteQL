@@ -5,7 +5,7 @@ import { Popover, PopoverTrigger, PopoverContent, Button} from "@nextui-org/reac
 
 function InstallPopover() {
     const content = (
-        <PopoverContent className='text-foreground'>
+        <PopoverContent className='text-foreground max-w-sm leading-relaxed p-2 rounded-xl px-4'>
             <InstallationProgress/>
         </PopoverContent>
     );

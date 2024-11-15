@@ -9,6 +9,7 @@ export default function InstallationProgress() {
             pendingInstallation: string[];
             installedVariables: string[];
         };
+        connectionStatus: string;
     } | null>(null);
 
     const [loading, setLoading] = useState(true);
@@ -40,7 +41,11 @@ export default function InstallationProgress() {
     return (
         <div>
             <div>
-                <p className='font-bold text-medium'>{installationData.message}</p>
+                <p className='font-bold my-2 bg-primary-100 rounded-xl p-2'>
+                    {installationData.connectionStatus}
+                </p>
+                <hr/>
+                <p className='font-bold text-medium my-2'>{installationData.message}</p>
                 {installationData.status === 'pending' ? (
                     <ul>
                         {installationData.data.pendingInstallation.map((item, index) => (
