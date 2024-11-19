@@ -2,10 +2,11 @@
 
 //PARAMS
 
-export interface CreateTableParams{
+export interface CreateTableParams {
     tableName: string;
     columns: { name: string; type: string }[];
 }
+
 export interface ConnectionParams {
     host: string;
     user: string;
@@ -60,7 +61,6 @@ export interface ToastProps{
     isOpen: boolean; 
     onClose: () => void; 
 }
-
 export interface CustomTableProps {
-    createTable: (tableName: string, columns: { name: string; type: string }[]) => void;
+    createTable: (params: CreateTableParams) => void; // Pass an object as a single argument
 }

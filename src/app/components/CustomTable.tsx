@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Input, Button, Select, SelectItem, SelectSection } from '@nextui-org/react';
-import { CustomTableProps } from '@/types/types';
+import { CustomTableProps, CreateTableParams } from '@/types/types';
 
 const CustomTable: React.FC<CustomTableProps> = ({ createTable }) => {
 
@@ -126,20 +126,14 @@ const CustomTable: React.FC<CustomTableProps> = ({ createTable }) => {
     };
 
     const handleSubmit = async () => {
-        if (!tableName.trim()) {
-            alert('Table name is required.');
-            return;
-        }
-        createTable(tableName, 
-            columns.map(
-                column => (
-                    {
-                        name: column.name,
-                        type: column.inputType,
-                    }
-                )
-            )
-        );
+        const params: CreateTableParams = {
+            tableName,
+            columns: columns.map(column => ({
+                name: column.name,
+                type: column.inputType,
+            })),
+        };
+        createTable(params);
     };
 
     return (
