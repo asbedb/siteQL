@@ -1,30 +1,18 @@
 import {useState} from 'react'
 import { Input, Textarea, Button } from '@nextui-org/react'
 import { UpdateSiteInformationProps } from '@/types/types';
-import Toast from './Toast';
 
-export default function SiteInformation ({ updateSiteInformation, error, successMessage}: UpdateSiteInformationProps) {
+export default function SiteInformation ({ updateSiteInformation}: UpdateSiteInformationProps) {
     //application information variables
     const [location, setLocation] = useState('');
     const [appName, setAppName] = useState('');
-    const [aboutApp, setAboutSite] = useState('');
-    //toast notification variables
-    const [toastOpen, setToastOpen] = useState(false); 
-    const [toastMessage, setToastMessage] = useState(''); 
+    const [aboutApp, setAboutSite] = useState(''); 
 
     // State for button disable - prevent multiple creations without a refresh/reset
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         await updateSiteInformation({ location, appName, aboutApp});
-        if(successMessage){
-            setToastMessage(successMessage);
-            setToastOpen(true);
-            setIsButtonDisabled(true);
-        }else{
-            setToastMessage(error);
-            setToastOpen(true);
-        }
     }
     const handleReset = () => {
         setLocation('');
@@ -72,11 +60,6 @@ export default function SiteInformation ({ updateSiteInformation, error, success
                 </div>
             </div>
         </form>
-        <Toast 
-            message={toastMessage} 
-            isOpen={toastOpen} 
-            onClose={() => setToastOpen(false)} 
-        />
     </div>
     )
 }

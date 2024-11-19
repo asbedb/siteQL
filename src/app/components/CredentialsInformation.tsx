@@ -3,7 +3,7 @@ import {Input, Button } from '@nextui-org/react'
 import Toast from './Toast';
 import { UpdateCredentialsProps } from '@/types/types';
 
-export default function CredentialsInformation({ updateCredentials, error, successMessage}: UpdateCredentialsProps) {
+export default function CredentialsInformation({ updateCredentials}: UpdateCredentialsProps) {
     //credentials variables
     const [fullName, setFullName] = useState('');
     const [password, setPassword] = useState('');
@@ -40,14 +40,6 @@ export default function CredentialsInformation({ updateCredentials, error, succe
             return;
         }
         await updateCredentials({ fullName, password, email});
-            if(successMessage){
-                setToastMessage(successMessage);
-                setToastOpen(true);
-                setIsButtonDisabled(true);
-            }else{
-                setToastMessage(error);
-                setToastOpen(true);
-            }
     };
     return (
     <div className='p-12'>

@@ -3,6 +3,9 @@ import { Input, Button, Select, SelectItem, SelectSection } from '@nextui-org/re
 import { CustomTableProps, CreateTableParams } from '@/types/types';
 
 const CustomTable: React.FC<CustomTableProps> = ({ createTable }) => {
+    const [tableName, setTableName] = useState('');
+    // State for button disable - prevent multiple creations without a refresh/reset
+    const [isButtonDisabled, setIsButtonDisabled] = useState(false); 
 
     const sqlTypes = [
         // Numeric Types
@@ -86,15 +89,12 @@ const CustomTable: React.FC<CustomTableProps> = ({ createTable }) => {
         }
     ];
     
-
     const [columns, setColumns] = useState([
         { id: 'id', name: 'table_id', inputType: 'INT PRIMARY KEY' },
         { id: 'column2', name: 'Column 2', inputType: '' },
         { id: 'column3', name: 'Column 3', inputType: '' },
         { id: 'column4', name: 'Column 4', inputType: '' },
     ]);
-
-    const [tableName, setTableName] = useState(''); 
     
     const handleTypeChange = (columnName: string, newType: string) => {
         setColumns(prevColumns =>
@@ -133,7 +133,7 @@ const CustomTable: React.FC<CustomTableProps> = ({ createTable }) => {
                 type: column.inputType,
             })),
         };
-        createTable(params);
+        await createTable(params);
     };
 
     return (
@@ -219,10 +219,12 @@ const CustomTable: React.FC<CustomTableProps> = ({ createTable }) => {
                     onClick={() => addColumn(`column${columns.length + 1}`, `Column ${columns.length+1}`, 'text')}>
                         Add Column
                 </Button>
-                <Button
+                <Button 
                     onClick={handleSubmit}
-                    className='bg-success'>
-                        Create Table
+                    color='success'
+                    variant={isButtonDisabled? 'light': 'solid'} 
+                    isDisabled={isButtonDisabled} >
+                        {isButtonDisabled? 'Table Saved': 'Save Table'}
                 </Button>
             </div>
         </div>

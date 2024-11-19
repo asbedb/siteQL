@@ -3,7 +3,7 @@ import { Input, Checkbox, Button } from '@nextui-org/react';
 import Toast from './Toast';
 import { SqlNodeInformationProps } from '../../types/types'; 
 
-function SqlNodeInformation({ connectCreateDB, error, successMessage }: SqlNodeInformationProps) {
+function SqlNodeInformation({ connectCreateDB }: SqlNodeInformationProps) {
     //Default Values for form
     const [host, setHost] = useState('localhost');
     const [user, setUser] = useState('root');
@@ -52,24 +52,7 @@ function SqlNodeInformation({ connectCreateDB, error, successMessage }: SqlNodeI
             return
         }
         await connectCreateDB({ host, user, password, dbName });
-        if(successMessage){
-            setIsButtonDisabled(true);
-            setToastMessage(successMessage);
-            setToastOpen(true);
-        }
     };
-
-    useEffect(() => {
-        if (error) {
-            setToastMessage(error);
-            setToastOpen(true);
-            setHost('localhost');
-            setUser('root');
-            setPassword('');
-            setConfirmPassword('');
-            setIsButtonDisabled(false);
-        }
-    }, [error]);
 
     return (
         <div className='p-12'>

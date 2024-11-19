@@ -33,28 +33,24 @@ export interface LoginCredentialsParams {
     userPassword: string;
 }
 
+export interface ShowToastParams{
+    message: string;
+    type: 'success' | 'error'; // Inline literal type
+}
 
 //PROPS
 export interface UploadImagesProps{
     uploadPfpImages: (data: { userPfp: File | null; sitePfp: File | null;}) => Promise<{ success: boolean; error?: string }>;
-    error: string;
-    successMessage: string;
 }
 export interface SqlNodeInformationProps {
     connectCreateDB: (data: { host: string; user: string; password: string; dbName: string }) => Promise<void>;
-    error: string;
-    successMessage: string;
 }
 export interface UpdateCredentialsProps {
     updateCredentials: (data: { fullName: string; email: string; password: string; }) => Promise<void>;
-    error: string;
-    successMessage: string;
 }
 
 export interface UpdateSiteInformationProps {
     updateSiteInformation: (data: { location: string; appName: string; aboutApp: string; }) => Promise<void>;
-    error: string;
-    successMessage: string;
 }
 export interface ToastProps{
     message: string
@@ -62,5 +58,5 @@ export interface ToastProps{
     onClose: () => void; 
 }
 export interface CustomTableProps {
-    createTable: (params: CreateTableParams) => void; // Pass an object as a single argument
+    createTable: (params: CreateTableParams) => Promise<void>; // Pass an object as a single argument
 }

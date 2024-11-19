@@ -2,18 +2,22 @@
 import Logo from "./Logo";
 import { useState } from "react";
 import { Button } from '@nextui-org/react'
-import { ConnectionParams, DBCredentialsParams, UpdateSiteParams, UploadPfpImageParams, CreateTableParams } from '../../types/types'; 
+import { ConnectionParams, DBCredentialsParams, UpdateSiteParams, UploadPfpImageParams, CreateTableParams, ShowToastParams } from '../../types/types'; 
 import IntroductionStep from './IntroductionStep';
 import SqlNodeInformation from './SqlNodeInformation';
 import CredentialsInformation from './CredentialsInformation';
 import SiteInformation from './SiteInformation';
 import PfpImage from './PfpImage';
 import CustomTable from "./CustomTable";
+import Toast from "./Toast";
 
 export default function FormBox() {
+
     const [step, setStep] = useState<number>(1);
-    const [errorMessage, setErrorMessage] = useState<string>('');
-    const [successMessage, setSuccessMessage] = useState<string>('');
+
+    const [toastOpen, setToastOpen] = useState(false);
+    const [toastMessage, setToastMessage] = useState('');
+    const [toastType, setToastType] = useState('success');
     //stephandler
     const handleNext = () => {
         if(step<6)setStep(step+1)
@@ -31,18 +35,19 @@ export default function FormBox() {
             });
             const result = await response.json();
             if (response.ok) {
-                setSuccessMessage('Database Created - Connection successful!'); 
+                showToast({message: 'DB Created/Updated and Connected', type: 'success'});
             } else {
                 throw new Error(result.error || 'Connection failed');
             }
         } catch (error) {
             if (error instanceof Error) {
-                setErrorMessage(error.message); 
+                showToast({message: error.message, type: 'error'}); 
             } else {
-                setErrorMessage('An unknown error occurred.');
+                showToast({message: 'An unknown error has occured', type: 'error'}); 
             }
         }
     };
+
     //update credentials in db function
     const updateCredentials = async({fullName, password, email}: DBCredentialsParams) => {
         try {
@@ -53,18 +58,19 @@ export default function FormBox() {
             });
             const result = await response.json();
             if (response.ok) {
-                setSuccessMessage('Credentials Updated'); 
+                showToast({message: 'Credentials Updated', type: 'success'});
             } else {
                 throw new Error(result.error || 'Update Failed');
             }
         } catch (error) {
             if (error instanceof Error) {
-                setErrorMessage(error.message); 
+                showToast({message: error.message, type: 'error'});
             } else {
-                setErrorMessage('An unknown error occurred.');
+                showToast({message: 'An unknown error occurred.', type: 'error'});
             }
         }
     };
+
     //update site info
     const updateSiteInformation = async({location, appName, aboutApp}: UpdateSiteParams) => {
         try {
@@ -75,18 +81,19 @@ export default function FormBox() {
             });
             const result = await response.json();
             if (response.ok) {
-                setSuccessMessage('Site and Profile Information Updated'); 
+                showToast({message: 'Site and Profile Information Updated', type: 'success'});
             } else {
                 throw new Error(result.error || 'Update Failed');
             }
         } catch (error) {
             if (error instanceof Error) {
-                setErrorMessage(error.message); 
+                showToast({message: error.message, type: 'error'});
             } else {
-                setErrorMessage('An unknown error occurred.');
+                showToast({message: 'An unknown error occurred.', type: 'error'});
             }
         }
     };
+
     // Upload Images
     const uploadPfpImages = async ({ sitePfp, userPfp }: UploadPfpImageParams): Promise<{ success: boolean; error?: string }> => {
         const formData = new FormData();
@@ -111,7 +118,7 @@ export default function FormBox() {
             };
         }
     };
-
+    //custom table injection
     const createTable = async ({tableName, columns}: CreateTableParams) => {
         try {
             const response = await fetch('/api/connections/createTable', {
@@ -122,15 +129,22 @@ export default function FormBox() {
     
             const data = await response.json();
             if (response.ok) {
-                setSuccessMessage(data.message || 'Table created successfully!');
-                // reset form or handle further logic
+                showToast({message: data.message || 'Table created successfully!', type: 'success'});
             } else {
-                setErrorMessage(data.error || 'Error creating table.');
+                showToast({message: data.error || 'Error creating table.', type: 'error'});
             }
         } catch (error) {
-            setErrorMessage(error + 'An error occurred.');
+            showToast({message: error + 'Error creating table.', type: 'error'});
         }
     };
+
+    //Notification System
+    const showToast = ({message, type}: ShowToastParams) => {
+        setToastMessage(message);
+        setToastType(type);
+        setToastOpen(true);
+        setTimeout(() => setToastOpen(false), 3000);
+    }
     const renderFormStep = () => {
         switch (step) {
             case 1:
@@ -138,23 +152,19 @@ export default function FormBox() {
             case 2:
                 return <SqlNodeInformation 
                             connectCreateDB={connectCreateDB}
-                            error={errorMessage}
-                            successMessage={successMessage}/>;
+                            />;
             case 3:
                 return <CredentialsInformation
                             updateCredentials={updateCredentials}
-                            error={errorMessage}
-                            successMessage={successMessage}/>;
+                            />;
             case 4:
                 return <SiteInformation 
                             updateSiteInformation={updateSiteInformation}
-                            error={errorMessage}
-                            successMessage={successMessage}/>;
+                            />;
             case 5:
                 return <PfpImage 
                             uploadPfpImages={uploadPfpImages}
-                            error={errorMessage}
-                            successMessage={successMessage}/>;
+                            />;
             case 6:
                 return <CustomTable
                             createTable={createTable}
@@ -187,6 +197,12 @@ export default function FormBox() {
                             <Button  onClick={handleNext}>Next</Button>
                         </div>
                     </div>
+                    <Toast
+                        message={toastMessage}
+                        isOpen={toastOpen}
+                        onClose={() => setToastOpen(false)}
+                        type={toastType} // Use for success/error styling
+                    />
             </div>
         </div>
     )
