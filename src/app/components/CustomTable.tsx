@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Input, Button, Tooltip, Select, SelectItem, SelectSection } from '@nextui-org/react';
+import { Input, Button, Select, SelectItem, SelectSection } from '@nextui-org/react';
+import { CustomTableProps } from '@/types/types';
 
-const CustomTable: React.FC = () => {
+const CustomTable: React.FC<CustomTableProps> = ({ createTable }) => {
 
     const sqlTypes = [
         // Numeric Types
@@ -88,9 +89,9 @@ const CustomTable: React.FC = () => {
 
     const [columns, setColumns] = useState([
         { id: 'id', name: 'table_id', inputType: 'INT PRIMARY KEY' },
-        { id: 'column2', name: 'Column 2', inputType: 'text' },
-        { id: 'column3', name: 'Column 3', inputType: 'text' },
-        { id: 'column4', name: 'Column 4', inputType: 'text' },
+        { id: 'column2', name: 'Column 2', inputType: '' },
+        { id: 'column3', name: 'Column 3', inputType: '' },
+        { id: 'column4', name: 'Column 4', inputType: '' },
     ]);
 
     const [tableName, setTableName] = useState(''); 
@@ -104,7 +105,7 @@ const CustomTable: React.FC = () => {
             )
         );
     };
-    // Handle changes to column names
+
     const handleColumnNameChange = (columnId: string, value: string) => {
         setColumns(prevColumns =>
             prevColumns.map(column =>
@@ -112,10 +113,11 @@ const CustomTable: React.FC = () => {
             )
         );
     };
-    // Remove a column from the table
+
     const removeColumn = (columnId: string) => {
         setColumns(prevColumns => prevColumns.filter(column => column.id !== columnId));
     };
+
     const addColumn = (id: string, name: string, inputType: string) => {
         setColumns(prevColumns => [
             ...prevColumns,
@@ -124,108 +126,111 @@ const CustomTable: React.FC = () => {
     };
 
     const handleSubmit = async () => {
-        try {
-            const response = await fetch('/api/connections/createTable', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    tableName,
-                    columns: columns.map(column => ({
+        if (!tableName.trim()) {
+            alert('Table name is required.');
+            return;
+        }
+        createTable(tableName, 
+            columns.map(
+                column => (
+                    {
                         name: column.name,
                         type: column.inputType,
-                    })),
-                }),
-            });
-
-            const data = await response.json();
-            if (response.ok) {
-                alert(data.message || 'Table created successfully!');
-            } else {
-                alert(data.error || 'Error creating table.');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            alert('An error occurred.');
-        }
+                    }
+                )
+            )
+        );
     };
 
     return (
-        <div className="border border-background rounded-lg mx-4 p-4">
+        <div className="border border-primary-200 rounded-lg mx-4 p-4 mt-14">
             <span className='text-xl font-bold'>Add a Custom Table:</span>
             <div id="table-name" className="my-4">
                 <Input
                     label="Enter Table Name"
                     aria-label="Table Name:"
+                    value={tableName}
                     onChange={(e) => setTableName(e.target.value)}
                 />
             </div>
-            <table className="min-w-full table-auto border p-4 mb-4">
-                <thead>
+            <table className="w-full border-collapse border">
+                <thead className="hidden md:table-header-group">
                     <tr>
-                        {columns.map((column) => (
-                            <td key={column.id} className=" bg-primary-200 text-foreground">
-                                {column.id === 'id' ? (
-                                    <span>ID (Default - Key)</span>
-                                ) : (
-                                    <div className="">
-                                        <Input
-                                            label={`Column Name`}
-                                            onChange={(e) => handleColumnNameChange(column.id, e.target.value)}
-                                            aria-label={`Column Name: ${column.name}`}
-                                            className='w-full p-2'
-                                            endContent={
-                                                <Tooltip content="Remove Column">
-                                                    <Button
-                                                        className="rounded-lg bg-danger text-white"
-                                                        onClick={() => removeColumn(column.id)}
-                                                    >
-                                                        -
-                                                    </Button>
-                                                </Tooltip>
-                                            }
-                                        />
-                                    </div>
-                                )}
-                            </td>
-                        ))}
+                    <th className="border p-2 bg-primary-200 text-foreground">Column Name</th>
+                    <th className="border p-2 bg-primary-200 text-foreground">Data Type</th>
+                    <th className="border p-2 bg-primary-200 text-foreground">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        {columns.map((column)=>(
-                            <td key={column.id}>
-                                {column.id === 'id' ?
-                                    <span className="flex items-center gap-2 p-2">
-                                        INT/INTEGER AUTOINCREMENT (Default)
-                                    </span> :
-                                    <Select className="w-full p-2" label="Column Data Type" onChange={(e) => handleTypeChange(column.name, e.target.value)}>
-                                        {sqlTypes.map((category) => (
-                                            <SelectSection
-                                                title={category.category}
-                                                key={category.category}
-                                                className='sticky bg-default-100 shadow-small rounded-small text-foreground'
-                                            >
-                                                {category.types.map((type) => (
-                                                    <SelectItem key={type.name}>{type.name}</SelectItem>
-                                                ))}
-                                            </SelectSection>
-                                        ))}
-                                    </Select>
-                                }
-                            </td>
-                        ))}
+                    {columns.map((column) => (
+                    <tr
+                        key={column.id}
+                        className="block border p-2 md:table-row md:border-none"
+                    >
+                        <td className="flex flex-col md:table-cell md:align-middle md:border md:p-2">
+                        <span className="block md:hidden font-bold">Column Name:</span>
+                        {column.id === "id" ? (
+                            "ID (Default - Key)"
+                        ) : (
+                            <Input
+                            label={`Column Name`}
+                            value={column.name}
+                            onChange={(e) => handleColumnNameChange(column.id, e.target.value)}
+                            aria-label={`Column Name: ${column.name}`}
+                            className="w-full"
+                            />
+                        )}
+                        </td>
+                        <td className="flex flex-col md:table-cell md:align-middle md:border md:p-2">
+                        <span className="block md:hidden font-bold">Data Type:</span>
+                        {column.id === "id" ? (
+                            "INT/INTEGER AUTOINCREMENT"
+                        ) : (
+                            <Select
+                                className="w-full"
+                                label="Column Data Type"
+                                onChange={(e) => handleTypeChange(column.name, e.target.value)}
+                            >
+                            {sqlTypes.map((category) => (
+                                <SelectSection
+                                title={category.category}
+                                key={category.category}
+                                className="sticky bg-default-100 shadow-small rounded-small text-foreground"
+                                >
+                                {category.types.map((type) => (
+                                    <SelectItem key={type.name}>{type.name}</SelectItem>
+                                ))}
+                                </SelectSection>
+                            ))}
+                            </Select>
+                        )}
+                        </td>
+                        <td className="flex flex-col md:table-cell md:align-middle md:border md:p-2">
+                        <span className="block md:hidden font-bold">Actions:</span>
+                        {column.id !== "id" && (
+                            <Button
+                            className="rounded-lg bg-danger text-white"
+                            onClick={() => removeColumn(column.id)}
+                            >
+                            Remove
+                            </Button>
+                        )}
+                        </td>
                     </tr>
+                    ))}
                 </tbody>
             </table>
-            <Button
-                onClick={() => addColumn(`column${columns.length + 1}`, `Column ${columns.length+1}`, 'text')}>
-                    Add Column
-            </Button>
-            <Button
-                onClick={handleSubmit}
-                className='bg-success'>
-                    Create Table
-            </Button>
+            <div className="flex flex-row items-center justify-between w-full pt-2">
+                <Button
+                    onClick={() => addColumn(`column${columns.length + 1}`, `Column ${columns.length+1}`, 'text')}>
+                        Add Column
+                </Button>
+                <Button
+                    onClick={handleSubmit}
+                    className='bg-success'>
+                        Create Table
+                </Button>
+            </div>
         </div>
     );
 };

@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Input, Image, Button } from '@nextui-org/react';
-import { uploadImagesProps } from '@/types/types';
+import { UploadImagesProps } from '@/types/types';
 import Toast from './Toast';
 
 type UserData = {
     pfp_image: string | null;
     app_image: string | null;
 };
-export default function PfpImage({ uploadPfpImages, error, successMessage }: uploadImagesProps) {
+export default function PfpImage({ uploadPfpImages, error, successMessage }: UploadImagesProps) {
     //file variables
     const [sitePfpFile, setSitePfpFile] = useState<File | null>(null);
     const [sitePfpFileName, setSitePfpFileName] = useState('');

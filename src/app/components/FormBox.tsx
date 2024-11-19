@@ -2,7 +2,7 @@
 import Logo from "./Logo";
 import { useState } from "react";
 import { Button } from '@nextui-org/react'
-import { ConnectionParams, DBCredentialsParams, updateSiteParams, uploadPfpImageParams } from '../../types/types'; 
+import { ConnectionParams, DBCredentialsParams, UpdateSiteParams, UploadPfpImageParams, CreateTableParams } from '../../types/types'; 
 import IntroductionStep from './IntroductionStep';
 import SqlNodeInformation from './SqlNodeInformation';
 import CredentialsInformation from './CredentialsInformation';
@@ -66,7 +66,7 @@ export default function FormBox() {
         }
     };
     //update site info
-    const updateSiteInformation = async({location, appName, aboutApp}: updateSiteParams) => {
+    const updateSiteInformation = async({location, appName, aboutApp}: UpdateSiteParams) => {
         try {
             const response = await fetch('/api/connections/updateDatabase', {
                 method: 'POST',
@@ -88,7 +88,7 @@ export default function FormBox() {
         }
     };
     // Upload Images
-    const uploadPfpImages = async ({ sitePfp, userPfp }: uploadPfpImageParams): Promise<{ success: boolean; error?: string }> => {
+    const uploadPfpImages = async ({ sitePfp, userPfp }: UploadPfpImageParams): Promise<{ success: boolean; error?: string }> => {
         const formData = new FormData();
         // Append files to FormData
         if (sitePfp) formData.append('sitePfp', sitePfp);
@@ -111,7 +111,26 @@ export default function FormBox() {
             };
         }
     };
+
+    const createTable = async ({tableName, columns}: CreateTableParams) => {
+        try {
+            const response = await fetch('/api/connections/createTable', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ tableName, columns }),
+            });
     
+            const data = await response.json();
+            if (response.ok) {
+                setSuccessMessage(data.message || 'Table created successfully!');
+                // reset form or handle further logic
+            } else {
+                setErrorMessage(data.error || 'Error creating table.');
+            }
+        } catch (error) {
+            setErrorMessage(error + 'An error occurred.');
+        }
+    };
     const renderFormStep = () => {
         switch (step) {
             case 1:
@@ -137,14 +156,16 @@ export default function FormBox() {
                             error={errorMessage}
                             successMessage={successMessage}/>;
             case 6:
-                return <CustomTable/>;
+                return <CustomTable
+                            createTable={createTable}
+                        />;
             default:
                 return <IntroductionStep/>;
         }
     };
 
     return(
-        <div className="p-5 h-screen md:p-20">
+        <div className="p-5 h-screen md:p-20 overflow-y-hidden">
             <div className="grid grid-cols-1 
                 grid-rows-10 
                 w-full 
@@ -152,15 +173,16 @@ export default function FormBox() {
                 items-center 
                 text-center 
                 rounded-xl 
-                bg-primary-50">
+                bg-primary-50
+                ">
                     <div className="flex flex-col items-center justify-center row-span-2">    
                         <Logo/>
                     </div>
-                    <div className="row-span-7">
+                    <div className="row-span-7 overflow-auto h-full">
                         {renderFormStep()}  
                     </div>
                     <div className="row-span-1">
-                        <div>
+                        <div className="flex flex-row items-center justify-between px-4 w-full">
                             {step > 1 && <Button onClick={handlePrevious}>Back</Button>}
                             <Button  onClick={handleNext}>Next</Button>
                         </div>

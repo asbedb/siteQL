@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Input, Button } from '@nextui-org/react';
 import Toast from './Toast';
-import { loginCredentialsParams } from '@/types/types';
+import { LoginCredentialsParams } from '@/types/types';
 import { useRouter } from 'next/navigation'
 
 export default function LoginForm() {
@@ -18,7 +18,7 @@ export default function LoginForm() {
         setUserPassword('');
     };
 
-    const loginCredentials = async ({ email, userPassword }: loginCredentialsParams) => {
+    const loginCredentials = async ({ email, userPassword }: LoginCredentialsParams) => {
         try {
             const response = await fetch('/api/connections/updateCredentials', {
                 method: 'POST',

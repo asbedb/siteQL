@@ -1,9 +1,9 @@
 import {useState} from 'react'
 import { Input, Textarea, Button } from '@nextui-org/react'
-import { updateSiteInformationProps } from '@/types/types';
+import { UpdateSiteInformationProps } from '@/types/types';
 import Toast from './Toast';
 
-export default function SiteInformation ({ updateSiteInformation, error, successMessage}: updateSiteInformationProps) {
+export default function SiteInformation ({ updateSiteInformation, error, successMessage}: UpdateSiteInformationProps) {
     //application information variables
     const [location, setLocation] = useState('');
     const [appName, setAppName] = useState('');
