@@ -16,7 +16,7 @@ const Toast: React.FC<ToastProps> = ({ message, isOpen, onClose }) => {
                 <ModalContent>
                     {(onClose) => (
                         <>
-                            <ModalHeader className="flex flex-col gap-1">SiteQL Notification</ModalHeader>
+                            <ModalHeader className="flex flex-col gap-1">siteQL Notification</ModalHeader>
                             <ModalBody>
                                 <p>
                                     {message} 

@@ -4,20 +4,28 @@ import Toast from './Toast';
 import { UpdateCredentialsProps } from '@/types/types';
 
 export default function CredentialsInformation({ updateCredentials, error, successMessage}: UpdateCredentialsProps) {
+    //credentials variables
     const [fullName, setFullName] = useState('');
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const isPasswordMatch = password && confirmPassword && password === confirmPassword;
+
     //toast notification variables
     const [toastOpen, setToastOpen] = useState(false); 
     const [toastMessage, setToastMessage] = useState(''); 
+
+    // State for button disable - prevent multiple creations without a refresh/reset
+    const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+
     const handleReset = () => {
         setFullName('');
         setEmail('');
         setPassword('');
         setConfirmPassword('');
+        setIsButtonDisabled(false);
     }
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         // Basic validation
@@ -35,6 +43,7 @@ export default function CredentialsInformation({ updateCredentials, error, succe
             if(successMessage){
                 setToastMessage(successMessage);
                 setToastOpen(true);
+                setIsButtonDisabled(true);
             }else{
                 setToastMessage(error);
                 setToastOpen(true);
@@ -80,7 +89,13 @@ export default function CredentialsInformation({ updateCredentials, error, succe
                     <Button onClick={handleReset}>Reset Values</Button>
                 </div>
                 <div>
-                    <Button type="submit">Create Database</Button>
+                    <Button 
+                        type="submit" 
+                        color='success'
+                        variant={isButtonDisabled? 'light': 'solid'} 
+                        isDisabled={isButtonDisabled} >
+                            {isButtonDisabled? 'Credentials Updated': 'Update Credentials'}
+                    </Button>
                 </div>
             </div>
         </form>

@@ -6,7 +6,7 @@ import InstallPopover from './InstallPopover'
 
 function ServiceBar() {
     return (
-        <div className='flex flex-row justify-between items-center p-4'>
+        <div className='flex flex-row justify-between items-center p-4 bg-primary-50'>
             <div><ThemeSwitcher/></div>
             <div className='flex flex-row'><ServicePing/> <InstallPopover/></div>
         </div>

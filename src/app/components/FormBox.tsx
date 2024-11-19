@@ -20,7 +20,8 @@ export default function FormBox() {
     };
     const handlePrevious = () => {
         if(step>1)setStep(step - 1)};
-    //test/createDB Function
+
+    //Connect/createDB Function
     const connectCreateDB = async ({ host, user, password, dbName }: ConnectionParams) => {
         try {
             const response = await fetch('/api/connections/createDatabase', {
@@ -30,7 +31,7 @@ export default function FormBox() {
             });
             const result = await response.json();
             if (response.ok) {
-                setSuccessMessage('Connection successful!'); 
+                setSuccessMessage('Database Created - Connection successful!'); 
             } else {
                 throw new Error(result.error || 'Connection failed');
             }
@@ -74,7 +75,7 @@ export default function FormBox() {
             });
             const result = await response.json();
             if (response.ok) {
-                setSuccessMessage('Profile Updated'); 
+                setSuccessMessage('Site and Profile Information Updated'); 
             } else {
                 throw new Error(result.error || 'Update Failed');
             }
@@ -87,38 +88,30 @@ export default function FormBox() {
         }
     };
     // Upload Images
-    const uploadPfpImages = async ({ sitePfp, userPfp }: uploadPfpImageParams) => {
+    const uploadPfpImages = async ({ sitePfp, userPfp }: uploadPfpImageParams): Promise<{ success: boolean; error?: string }> => {
         const formData = new FormData();
-        
         // Append files to FormData
         if (sitePfp) formData.append('sitePfp', sitePfp);
         if (userPfp) formData.append('userPfp', userPfp);
-        
         try {
-            // Make the POST request to upload the images
             const response = await fetch('/api/config/imageUploader', {
                 method: 'POST',
                 body: formData,
             });
-            // Parse the response
-            const result = await response.json();        
-            // Check if the response was successful
+            const result = await response.json();
             if (response.ok) {
-                setSuccessMessage('Profile Updated');
-                return result; // Return the result if needed
+                return { success: true }; // Return success
             } else {
-                throw new Error(result.error || 'Update Failed');
+                return { success: false, error: result.error || 'Upload failed.' };
             }
-        } catch (error) {
-            // Handle errors
-            if (error instanceof Error) {
-                setErrorMessage(error.message);
-            } else {
-                setErrorMessage('An unknown error occurred.');
-            }
+        } catch (err) {
+            return {
+                success: false,
+                error: err instanceof Error ? err.message : 'An unknown error occurred.',
+            };
         }
     };
-
+    
     const renderFormStep = () => {
         switch (step) {
             case 1:
@@ -159,7 +152,7 @@ export default function FormBox() {
                 items-center 
                 text-center 
                 rounded-xl 
-                bg-primary-100">
+                bg-primary-50">
                     <div className="flex flex-col items-center justify-center row-span-2">    
                         <Logo/>
                     </div>

@@ -10,13 +10,20 @@ function SqlNodeInformation({ connectCreateDB, error, successMessage }: SqlNodeI
     const [dbName, setDbName] = useState('newApp');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [blankDbPass, setBlankDbPass] = useState<boolean>(false); // State for checkbox
+
+    // State for checkbox
+    const [blankDbPass, setBlankDbPass] = useState<boolean>(false); 
+
     //variables for pw confirmation
     const isPasswordMatch = password && confirmPassword && password === confirmPassword;
     const noPassword = password === '' && confirmPassword === '';
+
     //toast notification variables
     const [toastOpen, setToastOpen] = useState(false); 
     const [toastMessage, setToastMessage] = useState(''); 
+
+    // State for button disable - prevent multiple creations without a refresh/reset
+    const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
     const resetForm = () =>{
         setHost('localhost');
@@ -46,6 +53,7 @@ function SqlNodeInformation({ connectCreateDB, error, successMessage }: SqlNodeI
         }
         await connectCreateDB({ host, user, password, dbName });
         if(successMessage){
+            setIsButtonDisabled(true);
             setToastMessage(successMessage);
             setToastOpen(true);
         }
@@ -59,6 +67,7 @@ function SqlNodeInformation({ connectCreateDB, error, successMessage }: SqlNodeI
             setUser('root');
             setPassword('');
             setConfirmPassword('');
+            setIsButtonDisabled(false);
         }
     }, [error]);
 
@@ -108,7 +117,8 @@ function SqlNodeInformation({ connectCreateDB, error, successMessage }: SqlNodeI
                     color={isPasswordMatch && !blankDbPass ? 'success' : 'default'}
                     className='py-2' />
                 <Checkbox 
-                    checked={blankDbPass} 
+                    checked={blankDbPass}
+                    color='success' 
                     onChange={(e) => setBlankDbPass(e.target.checked)} 
                     size="lg">
                     Blank Pass {'(DevOps)'}
@@ -118,7 +128,13 @@ function SqlNodeInformation({ connectCreateDB, error, successMessage }: SqlNodeI
                         <Button onClick={resetForm}>Reset Values</Button>
                     </div>
                     <div>
-                        <Button type="submit">Create Database</Button>
+                        <Button 
+                            type="submit" 
+                            color='success'
+                            variant={isButtonDisabled? 'light': 'solid'} 
+                            isDisabled={isButtonDisabled} >
+                                {isButtonDisabled? 'Database Created': 'Create Database'}
+                        </Button>
                     </div>
                 </div>
                 <Toast 

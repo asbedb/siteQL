@@ -13,8 +13,8 @@ export interface DBCredentialsParams{
     email: string;
 }
 export interface uploadPfpImageParams{
-    sitePfp: string;
-    userPfp: string;
+    sitePfp: File | null;
+    userPfp: File | null;
 }
 export interface updateSiteParams {
     location: string;
@@ -30,7 +30,7 @@ export interface loginCredentialsParams {
 
 //PROPS
 export interface uploadImagesProps{
-    uploadPfpImages: (data: { userPfp: string; sitePfp: string;}) => Promise<void>;
+    uploadPfpImages: (data: { userPfp: File | null; sitePfp: File | null;}) => Promise<{ success: boolean; error?: string }>;
     error: string;
     successMessage: string;
 }

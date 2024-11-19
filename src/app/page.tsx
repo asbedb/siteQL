@@ -9,7 +9,7 @@ export default function Home() {
   return (
     <>
       <Providers>
-      <ServiceBar />
+        <ServiceBar />
         <div className="text-foreground bg-background">
           {!isInstalled && (
                 <FormBox />

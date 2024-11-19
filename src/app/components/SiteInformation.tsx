@@ -4,18 +4,23 @@ import { updateSiteInformationProps } from '@/types/types';
 import Toast from './Toast';
 
 export default function SiteInformation ({ updateSiteInformation, error, successMessage}: updateSiteInformationProps) {
+    //application information variables
     const [location, setLocation] = useState('');
     const [appName, setAppName] = useState('');
     const [aboutApp, setAboutSite] = useState('');
     //toast notification variables
     const [toastOpen, setToastOpen] = useState(false); 
     const [toastMessage, setToastMessage] = useState(''); 
+
+    // State for button disable - prevent multiple creations without a refresh/reset
+    const [isButtonDisabled, setIsButtonDisabled] = useState(false);
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         await updateSiteInformation({ location, appName, aboutApp});
         if(successMessage){
             setToastMessage(successMessage);
             setToastOpen(true);
+            setIsButtonDisabled(true);
         }else{
             setToastMessage(error);
             setToastOpen(true);
@@ -25,11 +30,12 @@ export default function SiteInformation ({ updateSiteInformation, error, success
         setLocation('');
         setAppName('');
         setAboutSite('');
+        setIsButtonDisabled(false);
     }
 
     return (
     <div className='p-12'>
-        <span className='text-2xl font-semibold'>Some Information about your App</span>
+        <span className='text-2xl font-semibold'>Some Information about your application</span>
         <form onSubmit={handleSubmit}>
             <Input
                 type="text" 
@@ -56,7 +62,13 @@ export default function SiteInformation ({ updateSiteInformation, error, success
                     <Button onClick={handleReset}>Reset Values</Button>
                 </div>
                 <div>
-                    <Button type="submit">Create Database</Button>
+                    <Button 
+                        type="submit" 
+                        color='success'
+                        variant={isButtonDisabled? 'light': 'solid'} 
+                        isDisabled={isButtonDisabled} >
+                            {isButtonDisabled? 'Information Updated': 'Save Information'}
+                    </Button>
                 </div>
             </div>
         </form>
