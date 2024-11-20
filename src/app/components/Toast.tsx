@@ -6,7 +6,6 @@ import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button} from "
 
 const Toast: React.FC<ToastProps> = ({ message, isOpen, onClose }) => {
     return(
-        <>
             <Modal 
                 isOpen={isOpen} 
                 placement='bottom'
@@ -31,7 +30,6 @@ const Toast: React.FC<ToastProps> = ({ message, isOpen, onClose }) => {
                     )}
                 </ModalContent>
             </Modal>
-        </>
     )
 }
 

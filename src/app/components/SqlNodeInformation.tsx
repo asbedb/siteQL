@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+// components/SqlNodeInformation.tsx
+import { useState } from 'react';
 import { Input, Checkbox, Button } from '@nextui-org/react';
 import Toast from './Toast';
 import { SqlNodeInformationProps } from '../../types/types'; 
@@ -51,7 +52,10 @@ function SqlNodeInformation({ connectCreateDB }: SqlNodeInformationProps) {
             setToastOpen(true);
             return
         }
-        await connectCreateDB({ host, user, password, dbName });
+        // Ensure that the result is a QueryResult object with a success property
+        const { disablebtn } = await connectCreateDB({ host, user, password, dbName });
+        // Set the button disabled state based on success or failure
+        setIsButtonDisabled(disablebtn );
     };
 
     return (

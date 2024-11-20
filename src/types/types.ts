@@ -1,7 +1,11 @@
 // src/types/types.ts
 
-//PARAMS
+//Function Query Returns
+export interface QueryResult {
+    disablebtn: boolean;
+}
 
+//PARAMS
 export interface CreateTableParams {
     tableName: string;
     columns: { name: string; type: string }[];
@@ -35,7 +39,6 @@ export interface LoginCredentialsParams {
 
 export interface ShowToastParams{
     message: string;
-    type: 'success' | 'error'; // Inline literal type
 }
 
 //PROPS
@@ -43,7 +46,7 @@ export interface UploadImagesProps{
     uploadPfpImages: (data: { userPfp: File | null; sitePfp: File | null;}) => Promise<{ success: boolean; error?: string }>;
 }
 export interface SqlNodeInformationProps {
-    connectCreateDB: (data: { host: string; user: string; password: string; dbName: string }) => Promise<void>;
+    connectCreateDB: (data: { host: string; user: string; password: string; dbName: string }) => Promise<QueryResult>;
 }
 export interface UpdateCredentialsProps {
     updateCredentials: (data: { fullName: string; email: string; password: string; }) => Promise<void>;

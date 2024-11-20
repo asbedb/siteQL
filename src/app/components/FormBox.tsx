@@ -1,8 +1,9 @@
+// components/FormBox.tsx
 "use client"
 import Logo from "./Logo";
 import { useState } from "react";
 import { Button } from '@nextui-org/react'
-import { ConnectionParams, DBCredentialsParams, UpdateSiteParams, UploadPfpImageParams, CreateTableParams, ShowToastParams } from '../../types/types'; 
+import { ConnectionParams, DBCredentialsParams, UpdateSiteParams, UploadPfpImageParams, CreateTableParams, ShowToastParams, QueryResult } from '../../types/types'; 
 import IntroductionStep from './IntroductionStep';
 import SqlNodeInformation from './SqlNodeInformation';
 import CredentialsInformation from './CredentialsInformation';
@@ -17,16 +18,16 @@ export default function FormBox() {
 
     const [toastOpen, setToastOpen] = useState(false);
     const [toastMessage, setToastMessage] = useState('');
-    const [toastType, setToastType] = useState('success');
     //stephandler
     const handleNext = () => {
         if(step<6)setStep(step+1)
     };
+
     const handlePrevious = () => {
         if(step>1)setStep(step - 1)};
 
     //Connect/createDB Function
-    const connectCreateDB = async ({ host, user, password, dbName }: ConnectionParams) => {
+    const connectCreateDB = async ({ host, user, password, dbName }: ConnectionParams): Promise<QueryResult> => {
         try {
             const response = await fetch('/api/connections/createDatabase', {
                 method: 'POST',
@@ -35,16 +36,18 @@ export default function FormBox() {
             });
             const result = await response.json();
             if (response.ok) {
-                showToast({message: 'DB Created/Updated and Connected', type: 'success'});
+                showToast({message: 'DB Created/Updated and Connected'});
+                return { disablebtn: true}
             } else {
                 throw new Error(result.error || 'Connection failed');
             }
         } catch (error) {
             if (error instanceof Error) {
-                showToast({message: error.message, type: 'error'}); 
+                showToast({message: error.message}); 
             } else {
-                showToast({message: 'An unknown error has occured', type: 'error'}); 
+                showToast({message: 'An unknown error has occured'}); 
             }
+            return { disablebtn: false}
         }
     };
 
@@ -58,15 +61,15 @@ export default function FormBox() {
             });
             const result = await response.json();
             if (response.ok) {
-                showToast({message: 'Credentials Updated', type: 'success'});
+                showToast({message: 'Credentials Updated'});
             } else {
                 throw new Error(result.error || 'Update Failed');
             }
         } catch (error) {
             if (error instanceof Error) {
-                showToast({message: error.message, type: 'error'});
+                showToast({message: error.message});
             } else {
-                showToast({message: 'An unknown error occurred.', type: 'error'});
+                showToast({message: 'An unknown error occurred.'});
             }
         }
     };
@@ -81,15 +84,15 @@ export default function FormBox() {
             });
             const result = await response.json();
             if (response.ok) {
-                showToast({message: 'Site and Profile Information Updated', type: 'success'});
+                showToast({message: 'Site and Profile Information Updated'});
             } else {
                 throw new Error(result.error || 'Update Failed');
             }
         } catch (error) {
             if (error instanceof Error) {
-                showToast({message: error.message, type: 'error'});
+                showToast({message: error.message});
             } else {
-                showToast({message: 'An unknown error occurred.', type: 'error'});
+                showToast({message: 'An unknown error occurred.'});
             }
         }
     };
@@ -129,19 +132,18 @@ export default function FormBox() {
     
             const data = await response.json();
             if (response.ok) {
-                showToast({message: data.message || 'Table created successfully!', type: 'success'});
+                showToast({message: data.message || 'Table created successfully!'});
             } else {
-                showToast({message: data.error || 'Error creating table.', type: 'error'});
+                showToast({message: data.error || 'Error creating table.'});
             }
         } catch (error) {
-            showToast({message: error + 'Error creating table.', type: 'error'});
+            showToast({message: error + 'Error creating table.'});
         }
     };
 
     //Notification System
-    const showToast = ({message, type}: ShowToastParams) => {
+    const showToast = ({message}: ShowToastParams) => {
         setToastMessage(message);
-        setToastType(type);
         setToastOpen(true);
         setTimeout(() => setToastOpen(false), 3000);
     }
@@ -201,7 +203,6 @@ export default function FormBox() {
                         message={toastMessage}
                         isOpen={toastOpen}
                         onClose={() => setToastOpen(false)}
-                        type={toastType} // Use for success/error styling
                     />
             </div>
         </div>
