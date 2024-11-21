@@ -1,3 +1,4 @@
+// components/ServiceBar.tsx
 import React from 'react'
 import { ThemeSwitcher } from './ThemeSwitcher'
 import ServicePing from './ServicePing'

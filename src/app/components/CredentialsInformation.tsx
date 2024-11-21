@@ -1,3 +1,4 @@
+// components/CredentialsInformation.tsx
 import {useState} from 'react'
 import {Input, Button } from '@nextui-org/react'
 import Toast from './Toast';

@@ -1,4 +1,4 @@
-// components/MySQLServerStatus.tsx
+// components/ServicePing.tsx
 "use client"
 import { useState, useEffect } from 'react';
 import { Tooltip } from '@nextui-org/react';

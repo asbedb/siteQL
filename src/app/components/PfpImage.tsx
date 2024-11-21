@@ -1,3 +1,4 @@
+// components/PfpImage.tsx
 import { useState, useEffect } from 'react';
 import { Input, Image, Button } from '@nextui-org/react';
 import { UploadImagesProps } from '@/types/types';

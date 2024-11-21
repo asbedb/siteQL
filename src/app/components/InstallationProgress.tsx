@@ -1,3 +1,4 @@
+// components/InstallationProgress.tsx
 import { useState, useEffect } from 'react';
 
 export default function InstallationProgress() {

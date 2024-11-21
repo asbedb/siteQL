@@ -1,3 +1,4 @@
+// components/SiteInformation.tsx
 import {useState} from 'react'
 import { Input, Textarea, Button } from '@nextui-org/react'
 import { UpdateSiteInformationProps } from '@/types/types';
@@ -18,7 +19,7 @@ export default function SiteInformation ({ updateSiteInformation}: UpdateSiteInf
         // Set the button disabled state based on success or failure
         setIsButtonDisabled(disablebtn );
     }
-    
+
     const handleReset = () => {
         setLocation('');
         setAppName('');

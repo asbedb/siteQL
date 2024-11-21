@@ -1,3 +1,4 @@
+// components/InstallPopover.tsx
 'use client'
 import React from 'react'
 import InstallationProgress from './InstallationProgress';

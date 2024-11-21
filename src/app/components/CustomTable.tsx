@@ -1,12 +1,19 @@
+// components/CustomTable.tsx
 import React, { useState } from 'react';
 import { Input, Button, Select, SelectItem, SelectSection } from '@nextui-org/react';
 import { CustomTableProps, CreateTableParams } from '@/types/types';
+import Toast from './Toast';
+
 
 const CustomTable: React.FC<CustomTableProps> = ({ createTable }) => {
     const [tableName, setTableName] = useState('');
-    // State for button disable - prevent multiple creations without a refresh/reset
     const [isButtonDisabled, setIsButtonDisabled] = useState(false); 
+    
+    //Form validation notification state variables
+    const [toastOpen, setToastOpen] = useState(false); 
+    const [toastMessage, setToastMessage] = useState(''); 
 
+    //state variable to populate select drop down. 
     const sqlTypes = [
         // Numeric Types
         {
@@ -88,7 +95,8 @@ const CustomTable: React.FC<CustomTableProps> = ({ createTable }) => {
             ]
         }
     ];
-    
+
+    //main state variable for custom table utilising the first row as a default KEY
     const [columns, setColumns] = useState([
         { id: 'id', name: 'table_id', inputType: 'INT PRIMARY KEY' },
         { id: 'column2', name: 'Column 2', inputType: '' },
@@ -126,6 +134,17 @@ const CustomTable: React.FC<CustomTableProps> = ({ createTable }) => {
     };
 
     const handleSubmit = async () => {
+        const allColumnsValid = columns.every((column) => column.inputType.trim() !== '');
+        if(!tableName){
+            setToastMessage('Please enter a table name');
+            setToastOpen(true);
+            return;
+        }
+        if (!allColumnsValid) {
+            setToastMessage('Please select a valid data type for all columns');
+            setToastOpen(true);
+            return;
+        }
         const params: CreateTableParams = {
             tableName,
             columns: columns.map(column => ({
@@ -230,6 +249,11 @@ const CustomTable: React.FC<CustomTableProps> = ({ createTable }) => {
                         {isButtonDisabled? 'Table Saved': 'Save Table'}
                 </Button>
             </div>
+            <Toast 
+                message={toastMessage} 
+                isOpen={toastOpen} 
+                onClose={() => setToastOpen(false)} 
+            />
         </div>
     );
 };
