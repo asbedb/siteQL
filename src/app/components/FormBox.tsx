@@ -13,20 +13,19 @@ import CustomTable from "./CustomTable";
 import Toast from "./Toast";
 
 export default function FormBox() {
-
+    //state variables
     const [step, setStep] = useState<number>(1);
-
     const [toastOpen, setToastOpen] = useState(false);
     const [toastMessage, setToastMessage] = useState('');
-    //stephandler
+
+    //basic counter for installer
     const handleNext = () => {
         if(step<6)setStep(step+1)
     };
-
     const handlePrevious = () => {
         if(step>1)setStep(step - 1)};
 
-    //Connect/createDB Function
+    //creates and connects to the database.
     const connectCreateDB = async ({ host, user, password, dbName }: ConnectionParams): Promise<QueryResult> => {
         try {
             const response = await fetch('/api/connections/createDatabase', {
@@ -51,8 +50,8 @@ export default function FormBox() {
         }
     };
 
-    //update credentials in db function
-    const updateCredentials = async({fullName, password, email}: DBCredentialsParams) => {
+    //updates main credentials to login into app backend
+    const updateCredentials = async({fullName, password, email}: DBCredentialsParams): Promise<QueryResult> => {
         try {
             const response = await fetch('/api/connections/updateCredentials', {
                 method: 'POST',
@@ -62,6 +61,7 @@ export default function FormBox() {
             const result = await response.json();
             if (response.ok) {
                 showToast({message: 'Credentials Updated'});
+                return { disablebtn: true}
             } else {
                 throw new Error(result.error || 'Update Failed');
             }
@@ -71,11 +71,12 @@ export default function FormBox() {
             } else {
                 showToast({message: 'An unknown error occurred.'});
             }
+            return { disablebtn: false}
         }
     };
 
-    //update site info
-    const updateSiteInformation = async({location, appName, aboutApp}: UpdateSiteParams) => {
+    //updates application information
+    const updateSiteInformation = async({location, appName, aboutApp}: UpdateSiteParams): Promise<QueryResult> => {
         try {
             const response = await fetch('/api/connections/updateDatabase', {
                 method: 'POST',
@@ -85,6 +86,7 @@ export default function FormBox() {
             const result = await response.json();
             if (response.ok) {
                 showToast({message: 'Site and Profile Information Updated'});
+                return { disablebtn: true}
             } else {
                 throw new Error(result.error || 'Update Failed');
             }
@@ -94,10 +96,11 @@ export default function FormBox() {
             } else {
                 showToast({message: 'An unknown error occurred.'});
             }
+            return { disablebtn: false}
         }
     };
 
-    // Upload Images
+    // Upload Images for application
     const uploadPfpImages = async ({ sitePfp, userPfp }: UploadPfpImageParams): Promise<{ success: boolean; error?: string }> => {
         const formData = new FormData();
         // Append files to FormData
@@ -121,8 +124,9 @@ export default function FormBox() {
             };
         }
     };
-    //custom table injection
-    const createTable = async ({tableName, columns}: CreateTableParams) => {
+
+    //custom SQL Table for application
+    const createTable = async ({tableName, columns}: CreateTableParams): Promise<QueryResult> => {
         try {
             const response = await fetch('/api/connections/createTable', {
                 method: 'POST',
@@ -133,12 +137,14 @@ export default function FormBox() {
             const data = await response.json();
             if (response.ok) {
                 showToast({message: data.message || 'Table created successfully!'});
+                return { disablebtn: true}
             } else {
                 showToast({message: data.error || 'Error creating table.'});
-            }
+            }   
         } catch (error) {
             showToast({message: error + 'Error creating table.'});
         }
+        return { disablebtn: false}
     };
 
     //Notification System
@@ -147,6 +153,8 @@ export default function FormBox() {
         setToastOpen(true);
         setTimeout(() => setToastOpen(false), 3000);
     }
+
+    //renders current installer step
     const renderFormStep = () => {
         switch (step) {
             case 1:

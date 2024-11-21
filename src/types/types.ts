@@ -49,11 +49,11 @@ export interface SqlNodeInformationProps {
     connectCreateDB: (data: { host: string; user: string; password: string; dbName: string }) => Promise<QueryResult>;
 }
 export interface UpdateCredentialsProps {
-    updateCredentials: (data: { fullName: string; email: string; password: string; }) => Promise<void>;
+    updateCredentials: (data: { fullName: string; email: string; password: string; }) => Promise<QueryResult>;
 }
 
 export interface UpdateSiteInformationProps {
-    updateSiteInformation: (data: { location: string; appName: string; aboutApp: string; }) => Promise<void>;
+    updateSiteInformation: (data: { location: string; appName: string; aboutApp: string; })=> Promise<QueryResult>;
 }
 export interface ToastProps{
     message: string
@@ -61,5 +61,5 @@ export interface ToastProps{
     onClose: () => void; 
 }
 export interface CustomTableProps {
-    createTable: (params: CreateTableParams) => Promise<void>; // Pass an object as a single argument
+    createTable: (params: CreateTableParams) => Promise<QueryResult>; // Pass an object as a single argument
 }

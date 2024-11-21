@@ -4,14 +4,14 @@ import Toast from './Toast';
 import { UpdateCredentialsProps } from '@/types/types';
 
 export default function CredentialsInformation({ updateCredentials}: UpdateCredentialsProps) {
-    //credentials variables
+    //credential state variables
     const [fullName, setFullName] = useState('');
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const isPasswordMatch = password && confirmPassword && password === confirmPassword;
 
-    //toast notification variables
+    //Form validation notification state variables
     const [toastOpen, setToastOpen] = useState(false); 
     const [toastMessage, setToastMessage] = useState(''); 
 
@@ -39,7 +39,11 @@ export default function CredentialsInformation({ updateCredentials}: UpdateCrede
             setToastOpen(true);
             return;
         }
-        await updateCredentials({ fullName, password, email});
+        // Ensure that the result is a QueryResult object with a success property
+        const { disablebtn } = await updateCredentials({ fullName, password, email});
+        // Set the button disabled state based on success or failure
+        setIsButtonDisabled(disablebtn );
+        
     };
     return (
     <div className='p-12'>

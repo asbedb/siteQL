@@ -133,7 +133,10 @@ const CustomTable: React.FC<CustomTableProps> = ({ createTable }) => {
                 type: column.inputType,
             })),
         };
-        await createTable(params);
+        // Ensure that the result is a QueryResult object with a success property
+        const { disablebtn } = await createTable(params);
+        // Set the button disabled state based on success or failure
+        setIsButtonDisabled(disablebtn );
     };
 
     return (

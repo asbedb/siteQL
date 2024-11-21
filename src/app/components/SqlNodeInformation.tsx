@@ -5,21 +5,19 @@ import Toast from './Toast';
 import { SqlNodeInformationProps } from '../../types/types'; 
 
 function SqlNodeInformation({ connectCreateDB }: SqlNodeInformationProps) {
-    //Default Values for form
+    //State variables
     const [host, setHost] = useState('localhost');
     const [user, setUser] = useState('root');
     const [dbName, setDbName] = useState('newApp');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-
-    // State for checkbox
     const [blankDbPass, setBlankDbPass] = useState<boolean>(false); 
 
     //variables for pw confirmation
     const isPasswordMatch = password && confirmPassword && password === confirmPassword;
     const noPassword = password === '' && confirmPassword === '';
 
-    //toast notification variables
+    //State for Notifications associated with form validation
     const [toastOpen, setToastOpen] = useState(false); 
     const [toastMessage, setToastMessage] = useState(''); 
 

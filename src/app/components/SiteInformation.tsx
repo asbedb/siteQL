@@ -3,17 +3,22 @@ import { Input, Textarea, Button } from '@nextui-org/react'
 import { UpdateSiteInformationProps } from '@/types/types';
 
 export default function SiteInformation ({ updateSiteInformation}: UpdateSiteInformationProps) {
-    //application information variables
+    //application information state variables
     const [location, setLocation] = useState('');
     const [appName, setAppName] = useState('');
     const [aboutApp, setAboutSite] = useState(''); 
 
     // State for button disable - prevent multiple creations without a refresh/reset
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        await updateSiteInformation({ location, appName, aboutApp});
+        // Ensure that the result is a QueryResult object with a success property
+        const { disablebtn } = await updateSiteInformation({ location, appName, aboutApp});
+        // Set the button disabled state based on success or failure
+        setIsButtonDisabled(disablebtn );
     }
+    
     const handleReset = () => {
         setLocation('');
         setAppName('');
