@@ -40,27 +40,30 @@ export default function InstallationProgress() {
         return <div>Error loading installation data.</div>;
     }
     return (
-        <div>
-            <div className='p-2'>
-                <p className='font-bold my-2 bg-primary-100 rounded-xl p-2 text-center'>
-                    {installationData.connectionStatus}
-                </p>
-                <hr className='h-1 mx-auto my-4 bg-foreground border-0 rounded-xl'/>
-                <p className='font-bold text-medium my-2 '>{installationData.message}</p>
+        <div className='p-2'>
+            <p className='font-bold my-2 bg-primary-100 rounded-xl p-2 text-center'>
+                {installationData.connectionStatus}
+            </p>
+            <hr className='h-1 mx-auto my-4 bg-foreground border-0 rounded-xl'/>
+            <p className='font-bold text-medium my-2 '>{installationData.message}</p>
+            
                 {installationData.status === 'pending' ? (
-                    <ul>
-                        {installationData.data.pendingInstallation.map((item, index) => (
-                            <li key={index}>{item}</li>
-                        ))}
-                    </ul>
+                    <div >
+                        <ul className='ml-4 px-4 py-2 bg-primary-100 rounded-xl'>
+                            {installationData.data.pendingInstallation.map((item, index) => (
+                                <li key={index}>{item}</li>
+                            ))}
+                        </ul>
+                    </div>
                 ) : (
-                    <ul>
-                        {installationData.data.installedVariables.map((item, index) => (
-                            <li key={index}>{item}</li>
-                        ))}
-                    </ul>
+                    <div >
+                        <ul className='ml-4 px-4 py-2 bg-primary-100 rounded-xl'>
+                            {installationData.data.installedVariables.map((item, index) => (
+                                <li key={index}>{item}</li>
+                            ))}
+                        </ul>
+                    </div>
                 )}
             </div>
-        </div>
     );
 }
