@@ -11,6 +11,7 @@ import SiteInformation from './SiteInformation';
 import PfpImage from './PfpImage';
 import CustomTable from "./CustomTable";
 import Toast from "./Toast";
+import FinaliseInstallation from "./FinaliseInstallation";
 
 export default function FormBox() {
     //state variables
@@ -20,7 +21,7 @@ export default function FormBox() {
 
     //basic counter for installer
     const handleNext = () => {
-        if(step<6)setStep(step+1)
+        if(step<7)setStep(step+1)
     };
     const handlePrevious = () => {
         if(step>1)setStep(step - 1)};
@@ -183,6 +184,9 @@ export default function FormBox() {
                 return <CustomTable
                             createTable={createTable}
                         />;
+            case 7:
+                return <FinaliseInstallation
+                            />;
             default:
                 return <IntroductionStep/>;
         }

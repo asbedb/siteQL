@@ -31,10 +31,10 @@ export async function GET() {
         connection = await mysql.createConnection({ host, user, password, database: dbName });
         await connection.ping(); // Check if the database is responsive
         console.log('Database connection successful.');
-        connectionStatus = `DB Connection to ${dbName} was successful`;
+        connectionStatus = `🟢 DB Connection to ${dbName} was successful`;
     } catch (error) {
         connectionErrorMessage = error instanceof Error ? error.message : 'Unknown Error';
-        connectionStatus = `Database connection failed: ${connectionErrorMessage}`;
+        connectionStatus = `🔴 Database connection failed: ${connectionErrorMessage}`;
     } finally {
         if (connection) {
             await connection.end(); // Ensure the connection is closed
@@ -45,8 +45,8 @@ export async function GET() {
     const response = {
         status: pendingInstallation.length > 0 ? 'pending' : 'installed',
         message: pendingInstallation.length > 0 
-            ? 'Some ENV variables are missing' 
-            : 'All necessary ENV variables are set',
+            ? '🔴 Some ENV variables are missing' 
+            : '🟢 All necessary ENV variables are set ',
         data: {
             pendingInstallation,
             installedVariables
