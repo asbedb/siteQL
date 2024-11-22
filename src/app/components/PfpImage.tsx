@@ -2,13 +2,12 @@
 import { useState, useEffect } from 'react';
 import { Input, Image, Button } from '@nextui-org/react';
 import { UploadImagesProps } from '@/types/types';
-import Toast from './Toast';
 
 type UserData = {
     pfp_image: string | null;
     app_image: string | null;
 };
-export default function PfpImage({ uploadPfpImages, error, successMessage }: UploadImagesProps) {
+export default function PfpImage({ uploadPfpImages }: UploadImagesProps) {
     //file variables
     const [sitePfpFile, setSitePfpFile] = useState<File | null>(null);
     const [sitePfpFileName, setSitePfpFileName] = useState('');
@@ -21,9 +20,6 @@ export default function PfpImage({ uploadPfpImages, error, successMessage }: Upl
     const [userData, setUserData] = useState<UserData | null>(null);
     //button disabled vaeriables
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-    //toast variables
-    const [toastOpen, setToastOpen] = useState(false); 
-    const [toastMessage, setToastMessage] = useState(''); 
     const [errorMessage, setErrorMessage] = useState('');
 
     // Fetch user data on mount
@@ -65,17 +61,9 @@ export default function PfpImage({ uploadPfpImages, error, successMessage }: Upl
     
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const result = await uploadPfpImages({ sitePfp: sitePfpFile, userPfp: userPfpFile });
-        if (result?.success) {
-            setToastMessage(successMessage || 'Upload successful!');
-            setIsButtonDisabled(true);
-            // Fetch the latest user data after upload
-            fetchUserData();
-        } else {
-            setToastMessage(error || 'Upload failed. Please try again.');
-            setIsButtonDisabled(false);
-        }
-        setToastOpen(true);
+        const { disablebtn } = await uploadPfpImages({ sitePfp: sitePfpFile, userPfp: userPfpFile });
+        // Set the button disabled state based on success or failure
+        setIsButtonDisabled(disablebtn );
     };
 
     const handleReset = () => {
@@ -186,11 +174,6 @@ export default function PfpImage({ uploadPfpImages, error, successMessage }: Upl
                     </Button>
                 </div>
             </form>
-            <Toast 
-                message={toastMessage} 
-                isOpen={toastOpen} 
-                onClose={() => setToastOpen(false)} 
-            />  
         </div>
     );
 }

@@ -101,7 +101,7 @@ export default function FormBox() {
     };
 
     // Upload Images for application
-    const uploadPfpImages = async ({ sitePfp, userPfp }: UploadPfpImageParams): Promise<{ success: boolean; error?: string }> => {
+    const uploadPfpImages = async ({ sitePfp, userPfp }: UploadPfpImageParams): Promise<QueryResult> => {
         const formData = new FormData();
         // Append files to FormData
         if (sitePfp) formData.append('sitePfp', sitePfp);
@@ -113,15 +113,19 @@ export default function FormBox() {
             });
             const result = await response.json();
             if (response.ok) {
-                return { success: true }; // Return success
+                showToast({message: 'Images Uploaded Succcessfully'});
+                return { disablebtn: true}
             } else {
-                return { success: false, error: result.error || 'Upload failed.' };
+                showToast({ message: `${result.error}` || 'Upload failed.' });
             }
+            return{disablebtn: true}
         } catch (err) {
-            return {
-                success: false,
-                error: err instanceof Error ? err.message : 'An unknown error occurred.',
-            };
+            if(err instanceof Error){
+                showToast({message: err.message})
+            }else{
+                showToast({message: 'An Unknown Error has occured'})
+            }
+            return{disablebtn: true}
         }
     };
 

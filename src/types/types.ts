@@ -43,7 +43,7 @@ export interface ShowToastParams{
 
 //PROPS
 export interface UploadImagesProps{
-    uploadPfpImages: (data: { userPfp: File | null; sitePfp: File | null;}) => Promise<{ success: boolean; error?: string }>;
+    uploadPfpImages: (data: { userPfp: File | null; sitePfp: File | null;}) => Promise<QueryResult>;
 }
 export interface SqlNodeInformationProps {
     connectCreateDB: (data: { host: string; user: string; password: string; dbName: string }) => Promise<QueryResult>;
