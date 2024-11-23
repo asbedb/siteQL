@@ -1,3 +1,4 @@
+// src/app/api/connections/createTable/route.ts
 import { NextResponse, NextRequest } from 'next/server';
 import mysql from 'mysql2/promise'; 
 import writeEnvFile from '../../config/envWriter/route';

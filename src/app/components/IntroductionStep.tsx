@@ -5,7 +5,7 @@ import { Button } from '@nextui-org/react'
 function IntroductionStep() {
 
     return (
-        <div className='p-12 mt-12'>
+        <div className='p-12 mt-2'>
             <span className='text-2xl font-extrabold md:text-4xl'>Welcome to siteQL</span><br/><br/>
             <span className='text-md md:text-xl py-4'>
             siteQL is a powerful SQL web application designed to streamline the process of building and deploying CRUD-based 
@@ -16,7 +16,7 @@ function IntroductionStep() {
             siteQL simplifies backend setup by allowing for seamless integration with SQL databases, making it easy to launch 
             fully tailored applications with robust database support and secure access controls.</span><br/><br/>
             <br/>
-            <Button size="lg" className='mt-12'>
+            <Button size="lg" className='mt-4'>
                 GitHub
             </Button>  
         </div>

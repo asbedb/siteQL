@@ -195,7 +195,7 @@ export default function FormBox() {
     return(
         <div className="p-5 h-screen md:p-20 overflow-y-hidden">
             <div className="grid grid-cols-1 
-                grid-rows-10 
+                grid-rows-12 
                 w-full 
                 h-full 
                 items-center 
@@ -203,13 +203,13 @@ export default function FormBox() {
                 rounded-xl 
                 bg-primary-50
                 ">
-                    <div className="flex flex-col items-center justify-center row-span-2">    
+                    <div className="flex flex-col items-center justify-center row-span-4 h-auto ">    
                         <Logo/>
                     </div>
                     <div className="row-span-7 overflow-auto h-full">
                         {renderFormStep()}  
                     </div>
-                    <div className="row-span-1">
+                    <div className="row-span-1 ">
                         <div className="flex flex-row items-center justify-between px-4 w-full">
                             {step > 1 && <Button onClick={handlePrevious}>Back</Button>}
                             <Button  onClick={handleNext}>Next</Button>
