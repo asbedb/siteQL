@@ -6,7 +6,7 @@ function FinaliseInstallation() {
     return (
         <div className='p-12'>
             <span className='text-2xl font-semibold'>Finalise Installation</span>
-            <span className='text-left'>
+            <span className='flex text-left justify-left flex-col'>
                 <InstallationProgress/>
                 <FinalDBTest/>
             </span>

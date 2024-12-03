@@ -49,7 +49,7 @@ export default function InstallationProgress() {
             
                 {installationData.status === 'pending' ? (
                     <div >
-                        <ul className='ml-4 px-4 py-2 bg-primary-100 rounded-xl'>
+                        <ul className='px-4 py-2 bg-primary-100 rounded-xl'>
                             {installationData.data.pendingInstallation.map((item, index) => (
                                 <li key={index}>{item}</li>
                             ))}
@@ -57,13 +57,14 @@ export default function InstallationProgress() {
                     </div>
                 ) : (
                     <div >
-                        <ul className='ml-4 px-4 py-2 bg-primary-100 rounded-xl'>
+                        <ul className='px-4 py-2 bg-primary-100 rounded-xl'>
                             {installationData.data.installedVariables.map((item, index) => (
                                 <li key={index}>{item}</li>
                             ))}
                         </ul>
                     </div>
                 )}
-            </div>
+
+        </div>
     );
 }

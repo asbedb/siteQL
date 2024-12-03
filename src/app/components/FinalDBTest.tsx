@@ -51,7 +51,7 @@ function FinalDBTest() {
     return (
         <Code 
             ref={containerRef}
-            className="w-full p-4 leading-4 rounded-xl overflow-y-hidden h-[55px] bg-black text-green-500 scroll-auto"
+            className="w-full px-4 py-2 leading-4 rounded-xl overflow-y-hidden h-[100px] bg-blue-950 text-yellow-300 scroll-auto border-2 border-primary-100"
         >
             <AnimatePresence>
                 {codeLines.slice(0, visibleIndex).map((line, index) => (
