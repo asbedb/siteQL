@@ -1,7 +1,7 @@
 // components/FormBox.tsx
 "use client"
 import Logo from "./Logo";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from '@nextui-org/react'
 import { ConnectionParams, DBCredentialsParams, UpdateSiteParams, UploadPfpImageParams, CreateTableParams, ShowToastParams, QueryResult } from '../../types/types'; 
 import IntroductionStep from './IntroductionStep';
@@ -18,13 +18,21 @@ export default function FormBox() {
     const [step, setStep] = useState<number>(1);
     const [toastOpen, setToastOpen] = useState(false);
     const [toastMessage, setToastMessage] = useState('');
-
+    //effect variables
+    useEffect(() => {
+        const isInstalled = process.env.APPLICATION_INSTALLED === 'true';
+        if (isInstalled) {
+          // You can run logic here if necessary, but don't call finalizeInstall immediately
+        }
+    }, []); // Empty dependency array ensures this runs only once on mount
+    
     //basic counter for installer
     const handleNext = () => {
         if(step<7)setStep(step+1)
     };
     const handlePrevious = () => {
-        if(step>1)setStep(step - 1)};
+        if(step>1)setStep(step - 1)
+    };
 
     //creates and connects to the database.
     const connectCreateDB = async ({ host, user, password, dbName }: ConnectionParams): Promise<QueryResult> => {
@@ -159,6 +167,18 @@ export default function FormBox() {
         setTimeout(() => setToastOpen(false), 3000);
     }
 
+    //FinalizeInstallation function
+    const finalizeInstall = () => {
+        if(process.env.APPLICATION_INSTALLED === 'true'){
+            showToast({message: 'Application successfully installed - page refreshing'})
+            setTimeout(()=>{
+                location.reload()
+            }, 1000)
+        }else{
+            showToast({message: 'Missing variables please refer to error messages'})
+        }
+    }
+
     //renders current installer step
     const renderFormStep = () => {
         switch (step) {
@@ -192,6 +212,8 @@ export default function FormBox() {
         }
     };
 
+
+
     return(
         <div className="p-5 h-screen md:p-20 overflow-y-hidden">
             <div className="grid grid-cols-1 
@@ -211,8 +233,8 @@ export default function FormBox() {
                     </div>
                     <div className="row-span-1 ">
                         <div className="flex flex-row items-center justify-between px-4 w-full">
-                            {step > 1 && <Button onClick={handlePrevious}>Back</Button>}
-                            <Button  onClick={handleNext}>Next</Button>
+                            {step > 1 ? <Button onClick={handlePrevious}>Back</Button>: <div></div>}
+                            {step != 7 ? <Button  onClick={handleNext}>Next</Button>: <Button  onClick={finalizeInstall}>Finalize Installation</Button>}
                         </div>
                     </div>
                     <Toast
