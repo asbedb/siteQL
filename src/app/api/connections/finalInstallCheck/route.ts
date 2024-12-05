@@ -1,5 +1,9 @@
 import { NextResponse } from 'next/server';
 import mysql from 'mysql2/promise';
+import writeEnvFile from '../../config/envWriter/route';
+
+//global variable for allChecksPassed
+let allChecksPass: boolean = false;
 
 type CheckResult = {
     check: string;
@@ -7,7 +11,17 @@ type CheckResult = {
     message: string;
 };
 
+// Export GET handler
 export async function GET() {
+    return handleGet();
+}
+
+// Export POST handler
+export async function POST() {
+    return handlePost();
+}
+
+async function handleGet() {
     const host = process.env.DB_HOST;
     const user = process.env.DB_USER;
     const dbName = process.env.DB_NAME;
@@ -26,14 +40,13 @@ export async function GET() {
     const results: CheckResult[] = [];
     let connection;
     let connectionStatus = '🟢 Connection successful.';
-    const allChecksPass = results.every((result) => result.status === 'pass'); // Check if all status are 'pass'
+
 
     try {
         // Test database connection
         connection = await mysql.createConnection({ host, user, password });
         await connection.ping();
         results.push({ check: 'Database Connection', status: 'pass', message: 'Connected successfully.' });
-
         // Check if database exists
         const [dbCheck] = await connection.execute(
             `SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = ?`,
@@ -44,7 +57,6 @@ export async function GET() {
         } else {
             results.push({ check: `Database '${dbName}'`, status: 'fail', message: 'Database does not exist.' });
         }
-
         // Check if main table exists
         const [mainTableCheck] = await connection.execute(
             `SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ?`,
@@ -55,7 +67,6 @@ export async function GET() {
         } else {
             results.push({ check: `Main Table '${tableName}'`, status: 'fail', message: 'Table does not exist.' });
         }
-
         // Check each custom table
         if (customTables && customTables.length > 0) {
             for (const customTable of customTables) {
@@ -70,10 +81,7 @@ export async function GET() {
                 }
             }
         }
-
-        // Determine if all checks passed
-
-
+        allChecksPass = results.every((result) => result.status === 'pass'); // Check if all status are 'pass'
         // Return results based on checks
         return NextResponse.json({
             allChecksPass,
@@ -87,14 +95,11 @@ export async function GET() {
         // Connection failed, set the status
         connectionStatus = `🔴 Connection failed: ${(error as Error).message}`;
         results.push({ check: 'Database Connection', status: 'fail', message: connectionStatus });
-
         // Return failure response
         return NextResponse.json({
             status: 'error',
             codeLines: results.map(result => result.message + error),
-            message: allChecksPass
-                ? 'All checks passed successfully!'
-                : 'Some checks failed. Please review the details.',
+            message: 'Some checks failed. Please review the details.',
         });
     } finally {
         if (connection) {
@@ -102,3 +107,19 @@ export async function GET() {
         }
     }
 }
+
+async function handlePost() {
+    if (allChecksPass) {
+        await writeEnvFile({
+            APPLICATION_INSTALLED: 'true'
+        })
+        return NextResponse.json({
+            message: "Installation successful! All checks passed.",
+            status: "success",
+        });
+    } 
+    return NextResponse.json({
+        message: "Installation failed. Some checks did not pass.",
+        status: "error",
+    });
+} 

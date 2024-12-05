@@ -3,7 +3,14 @@
 import Logo from "./Logo";
 import { useState } from "react";
 import { Button } from '@nextui-org/react'
-import { ConnectionParams, DBCredentialsParams, UpdateSiteParams, UploadPfpImageParams, CreateTableParams, ShowToastParams, QueryResult, FinalInstallCheckQueryResult } from '../../types/types'; 
+import {    ConnectionParams, 
+            DBCredentialsParams, 
+            UpdateSiteParams, 
+            UploadPfpImageParams, 
+            CreateTableParams, 
+            ShowToastParams, 
+            QueryResult, 
+            FinalInstallCheckQueryResult } from '../../types/types'; 
 import IntroductionStep from './IntroductionStep';
 import SqlNodeInformation from './SqlNodeInformation';
 import CredentialsInformation from './CredentialsInformation';
@@ -12,6 +19,7 @@ import PfpImage from './PfpImage';
 import CustomTable from "./CustomTable";
 import Toast from "./Toast";
 import FinaliseInstallation from "./FinaliseInstallation";
+
 
 export default function FormBox() {
     //state variables
@@ -159,17 +167,14 @@ export default function FormBox() {
         try {
             const response = await fetch('/api/connections/finalInstallCheck', {
                 method: 'GET',
-            });
-    
+            }); 
             if (!response.ok) {
                 throw new Error(`API error: ${response.statusText}`);
             }
-    
             const data = await response.json();
             return data;
         } catch (error) {
             console.error('Error in finalizeInstall:', error);
-    
             // Return a fallback response on error
             return {
                 allChecksPass: false,
@@ -178,7 +183,31 @@ export default function FormBox() {
         }
     };
 
-    //Finish by writing ENV
+    //Finish by writing ENV as installed
+    const finishInstallation = async () => {
+        setDisableBtn(true)
+        try {
+            const response = await fetch('/api/connections/finalInstallCheck', {
+                method: 'POST',
+            });
+    
+            if (!response.ok) {
+                throw new Error(`API error: ${response.statusText}`);
+            }
+            const data = await response.json();
+            setTimeout(()=>{
+                showToast({message: 'Finalising Installation, Page will refresh shortly - Happy developing! 🍵🍵🍵 '})
+            }, 5000)
+            return data;
+        } catch (error) {
+            showToast({message: 'Error: '+ error}) 
+            // Return a fallback response on error
+            return {
+                allChecksPass: false,
+                codeLines: [],
+            };
+        }
+    }
     //Notification System
     const showToast = ({message}: ShowToastParams) => {
         setToastMessage(message);
@@ -248,6 +277,7 @@ export default function FormBox() {
                                     isDisabled={disableBtn} 
                                     variant={disableBtn? 'light': 'solid'}
                                     color={disableBtn? 'default': 'success'}
+                                    onClick={finishInstallation}
                                     >Finalize Installation</Button>}
                         </div>
                     </div>

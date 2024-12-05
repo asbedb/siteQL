@@ -35,5 +35,6 @@ const writeEnvFile = async (keyValues: KeyValue) => {
     } catch (err) {
         console.error('Error writing to .env file:', err);
     }
+    
 };
 export default writeEnvFile;
