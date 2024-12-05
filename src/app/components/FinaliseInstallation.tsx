@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Code } from '@nextui-org/react';
+import { Code, Button } from '@nextui-org/react';
 import { FinalInstallCheckProps } from '@/types/types';
 
 const FinaliseInstallation: React.FC<FinalInstallCheckProps> = ({ finalInstallCheck, setDisableBtn }) => {
@@ -8,17 +8,25 @@ const FinaliseInstallation: React.FC<FinalInstallCheckProps> = ({ finalInstallCh
     const [visibleIndex, setVisibleIndex] = useState(0);
     const [results, setResults] = useState<[]>([]);
     const [status, setStatus] = useState<string | null>(null);
+    const [runInstallBtnDisable, setRunInstallButtonDisable] = useState<boolean>(false)
 
     const handleCheck = async () => {
         try {
             setStatus('Running installation check...');
+            setRunInstallButtonDisable(true)
             setResults([])
+            setVisibleIndex(0)
+            setDisableBtn(true)
             const response = await finalInstallCheck();
-            setResults(response.codeLines); // Set the results from the response
             setTimeout(()=>{
-                setStatus('Installation Check Complete - Passed!');
-                setDisableBtn(!response.allChecksPass);
-            },10000)
+                setResults(response.codeLines); // Set the results from the response
+                setTimeout(()=>{
+                    setStatus('Installation Check Complete - Passed!');
+                    setDisableBtn(!response.allChecksPass);
+                    setRunInstallButtonDisable(false)
+                },10000)
+            },1000)
+
             
         } catch (error) {
             setStatus('Installation check failed');
@@ -56,12 +64,13 @@ const FinaliseInstallation: React.FC<FinalInstallCheckProps> = ({ finalInstallCh
 
     return (
         <div className="w-full p-4 text-left">
-            <button
+            <Button
                 onClick={handleCheck}
                 className="mb-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                isDisabled={runInstallBtnDisable}
             >
                 Run Final Install Check
-            </button>
+            </Button>
 
             {status && (
                 <div className="text-sm mb-2">
