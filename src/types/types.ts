@@ -4,8 +4,8 @@
 export interface QueryResult {
     disablebtn: boolean;
 }
-export interface FinalizeInstallQueryResult {
-    allChecksPass?: boolean;
+export interface FinalInstallCheckQueryResult {
+    allChecksPass: boolean;
     codeLines: [];
 }
 
@@ -50,8 +50,9 @@ export interface UploadImagesProps{
     uploadPfpImages: (data: { userPfp: File | null; sitePfp: File | null;}) => Promise<QueryResult>;
 }
 
-export interface FinalizeInstallProps {
-    finalizeInstall: () => Promise<FinalizeInstallQueryResult>;
+export interface FinalInstallCheckProps {
+    finalInstallCheck: () => Promise<FinalInstallCheckQueryResult>;
+    setDisableBtn: (state: boolean) => void;
 }
 export interface SqlNodeInformationProps {
     connectCreateDB: (data: { host: string; user: string; password: string; dbName: string }) => Promise<QueryResult>;

@@ -1,38 +1,42 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Code } from '@nextui-org/react';
-import { FinalizeInstallProps } from '@/types/types';
+import { FinalInstallCheckProps } from '@/types/types';
 
-const FinaliseInstallation: React.FC<FinalizeInstallProps> = ({ finalizeInstall }) => {
+const FinaliseInstallation: React.FC<FinalInstallCheckProps> = ({ finalInstallCheck, setDisableBtn }) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const [visibleIndex, setVisibleIndex] = useState(0);
     const [results, setResults] = useState<[]>([]);
     const [status, setStatus] = useState<string | null>(null);
 
-
-
-
     const handleCheck = async () => {
         try {
             setStatus('Running installation check...');
-            const response = await finalizeInstall();
+            setResults([])
+            const response = await finalInstallCheck();
             setResults(response.codeLines); // Set the results from the response
+            setTimeout(()=>{
+                setStatus('Installation Check Complete - Passed!');
+                setDisableBtn(!response.allChecksPass);
+            },10000)
+            
         } catch (error) {
             setStatus('Installation check failed');
             console.error(error);
+            setDisableBtn(true);
         }
     };
 
     // Simulate animated lines appearance
     useEffect(() => {
-        if (results && visibleIndex >= results.length) return;
+        if (visibleIndex >= results.length) return;
 
         const timer = setTimeout(() => {
             setVisibleIndex((prev) => prev + 1);
         }, 1000);
 
         return () => clearTimeout(timer);
-    }, [visibleIndex, results?.length]);
+    }, [visibleIndex, results.length]);
 
     // Scroll container when new lines appear
     useEffect(() => {

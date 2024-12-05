@@ -3,7 +3,7 @@
 import Logo from "./Logo";
 import { useState } from "react";
 import { Button } from '@nextui-org/react'
-import { ConnectionParams, DBCredentialsParams, UpdateSiteParams, UploadPfpImageParams, CreateTableParams, ShowToastParams, QueryResult, FinalizeInstallQueryResult } from '../../types/types'; 
+import { ConnectionParams, DBCredentialsParams, UpdateSiteParams, UploadPfpImageParams, CreateTableParams, ShowToastParams, QueryResult, FinalInstallCheckQueryResult } from '../../types/types'; 
 import IntroductionStep from './IntroductionStep';
 import SqlNodeInformation from './SqlNodeInformation';
 import CredentialsInformation from './CredentialsInformation';
@@ -18,7 +18,8 @@ export default function FormBox() {
     const [step, setStep] = useState<number>(1);
     const [toastOpen, setToastOpen] = useState(false);
     const [toastMessage, setToastMessage] = useState('');
-    
+    const [disableBtn, setDisableBtn] = useState<boolean>(true);
+
     //basic counter for installer
     const handleNext = () => {
         if(step<7)setStep(step+1)
@@ -154,7 +155,7 @@ export default function FormBox() {
     };
 
     //FinalizeInstallation function
-    const finalizeInstall = async (): Promise<FinalizeInstallQueryResult> => {
+    const finalInstallCheck = async (): Promise<FinalInstallCheckQueryResult> => {
         try {
             const response = await fetch('/api/connections/finalInstallCheck', {
                 method: 'GET',
@@ -165,8 +166,7 @@ export default function FormBox() {
             }
     
             const data = await response.json();
-    
-            return data; // Return the parsed response as the Promise value
+            return data;
         } catch (error) {
             console.error('Error in finalizeInstall:', error);
     
@@ -178,14 +178,13 @@ export default function FormBox() {
         }
     };
 
+    //Finish by writing ENV
     //Notification System
     const showToast = ({message}: ShowToastParams) => {
         setToastMessage(message);
         setToastOpen(true);
         setTimeout(() => setToastOpen(false), 3000);
     }
-
-
     //renders current installer step
     const renderFormStep = () => {
         switch (step) {
@@ -213,7 +212,8 @@ export default function FormBox() {
                         />;
             case 7:
                 return <FinaliseInstallation
-                            finalizeInstall={finalizeInstall}
+                            finalInstallCheck={finalInstallCheck}
+                            setDisableBtn={setDisableBtn}
                             />;
             default:
                 return <IntroductionStep/>;
@@ -242,7 +242,13 @@ export default function FormBox() {
                     <div className="row-span-1 ">
                         <div className="flex flex-row items-center justify-between px-4 w-full">
                             {step > 1 ? <Button onClick={handlePrevious}>Back</Button>: <div></div>}
-                            {step != 7 ? <Button  onClick={handleNext}>Next</Button>: <Button onClick={() => finalizeInstall}>Finalize Installation</Button>}
+                            {step != 7 ? 
+                                <Button  onClick={handleNext}>Next</Button>: 
+                                <Button 
+                                    isDisabled={disableBtn} 
+                                    variant={disableBtn? 'light': 'solid'}
+                                    color={disableBtn? 'default': 'success'}
+                                    >Finalize Installation</Button>}
                         </div>
                     </div>
                     <Toast
