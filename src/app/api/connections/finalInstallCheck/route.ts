@@ -1,4 +1,3 @@
-// src/app/api/connections/finalInstallCheck/route.ts
 import { NextResponse } from 'next/server';
 import mysql from 'mysql2/promise';
 
@@ -27,6 +26,7 @@ export async function GET() {
     const results: CheckResult[] = [];
     let connection;
     let connectionStatus = '🟢 Connection successful.';
+    const allChecksPass = results.every((result) => result.status === 'pass'); // Check if all status are 'pass'
 
     try {
         // Test database connection
@@ -72,28 +72,33 @@ export async function GET() {
         }
 
         // Determine if all checks passed
-        const allChecksPass = results.every((result) => result.status === 'pass'); // Check if all status are 'pass'
 
+
+        // Return results based on checks
         return NextResponse.json({
             allChecksPass,
-            results,
+            codeLines: results.map(result => result.check + ' ' +  result.status + ' ' + result.message),
             message: allChecksPass
                 ? 'All checks passed successfully!'
                 : 'Some checks failed. Please review the details.',
         });
+
     } catch (error) {
+        // Connection failed, set the status
         connectionStatus = `🔴 Connection failed: ${(error as Error).message}`;
         results.push({ check: 'Database Connection', status: 'fail', message: connectionStatus });
+
+        // Return failure response
+        return NextResponse.json({
+            status: 'error',
+            codeLines: results.map(result => result.message + error),
+            message: allChecksPass
+                ? 'All checks passed successfully!'
+                : 'Some checks failed. Please review the details.',
+        });
     } finally {
         if (connection) {
             await connection.end();
         }
     }
-
-    // Return results
-    return NextResponse.json({
-        status: results.some((res) => res.status === 'fail') ? 'error' : 'success',
-        connectionStatus,
-        results,
-    });
 }

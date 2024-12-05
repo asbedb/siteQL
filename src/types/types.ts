@@ -4,6 +4,10 @@
 export interface QueryResult {
     disablebtn: boolean;
 }
+export interface FinalizeInstallQueryResult {
+    allChecksPass?: boolean;
+    codeLines: [];
+}
 
 //PARAMS
 export interface CreateTableParams {
@@ -45,6 +49,10 @@ export interface ShowToastParams{
 export interface UploadImagesProps{
     uploadPfpImages: (data: { userPfp: File | null; sitePfp: File | null;}) => Promise<QueryResult>;
 }
+
+export interface FinalizeInstallProps {
+    finalizeInstall: () => Promise<FinalizeInstallQueryResult>;
+}
 export interface SqlNodeInformationProps {
     connectCreateDB: (data: { host: string; user: string; password: string; dbName: string }) => Promise<QueryResult>;
 }
@@ -63,3 +71,4 @@ export interface ToastProps{
 export interface CustomTableProps {
     createTable: (params: CreateTableParams) => Promise<QueryResult>; // Pass an object as a single argument
 }
+

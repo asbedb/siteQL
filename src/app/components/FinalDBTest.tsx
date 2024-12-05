@@ -1,38 +1,34 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Code } from '@nextui-org/react';
+import { FinalizeInstallProps, FinalizeInstallQueryResult } from '@/types/types';
 
-const FinalDBTest = () => {
+const FinalDBTest: React.FC<FinalizeInstallProps> = ({ finalizeInstall }) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const [visibleIndex, setVisibleIndex] = useState(0);
-    const [codeLines, setCodeLines] = useState<string[]>([]);
+    const [results, setResults] = useState<FinalizeInstallQueryResult[]>([]);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
-    const [allChecksPass, setAllChecksPass] = useState(false); // Use state for allChecksPass
 
-    
-    // Fetch API data on component mount
-    useEffect(() => {
-        const fetchAPI = async () => {
-            try {
-                const response = await fetch('/api/connections/finalInstallCheck');
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch: ${response.statusText}`);
-                }
-                const data = await response.json();
-                setAllChecksPass(data.allChecksPass); // Set the allChecksPass state
-                const fetchedLines = data.results.map(
-                    (result: { check: string; status: string; message: string }) =>
-                        `-- ${result.check}: ${result.status.toUpperCase()} - ${result.message}`
-                );
-                
-                setCodeLines(fetchedLines);
-            } catch (error) {
-                setErrorMessage((error as Error).message);
-            }
-        };
-        fetchAPI();
-    }, []);
+    // Simulated code lines for animation
+    const codeLines = results.map(
+        (result) => `${result.codeLines}`
+    );
 
+    // Check if all checks passed
+    const allChecksPass = results.every((result) => result.allChecksPass === true);
+
+    const handleCheck = async () => {
+        try {
+            setErrorMessage(null); // Reset error
+            const response = await finalizeInstall();
+            setResults(response.codeLines);
+        } catch (error) {
+            setErrorMessage('Failed to complete installation check.');
+            console.error(error);
+        }
+    };
+
+    // Simulate animated lines appearance
     useEffect(() => {
         if (visibleIndex >= codeLines.length) return;
 
@@ -43,6 +39,7 @@ const FinalDBTest = () => {
         return () => clearTimeout(timer);
     }, [visibleIndex, codeLines.length]);
 
+    // Scroll container when new lines appear
     useEffect(() => {
         if (containerRef.current) {
             containerRef.current.scrollTop = containerRef.current.scrollHeight;
@@ -60,16 +57,30 @@ const FinalDBTest = () => {
 
     return (
         <div className="w-full">
+            <button
+                onClick={handleCheck}
+                className="mb-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            >
+                Run Final Install Check
+            </button>
+
             {errorMessage && (
                 <div className="text-red-500 mb-4">
                     Error: {errorMessage}
                 </div>
             )}
 
+            {status && (
+                <div className="text-sm mb-2">
+                    <p>Status: {status}</p>
+                    {allChecksPass && <p>Connection Status: {allChecksPass}</p>}
+                </div>
+            )}
+
             {allChecksPass ? (
                 <Code
                     ref={containerRef}
-                    className="w-full px-4 py-2 leading-4 rounded-xl overflow-y-hidden h-[300px] bg-blue-950 text-yellow-300 scroll-auto border-2 border-primary-100"
+                    className="w-full px-4 py-2 leading-4 rounded-xl overflow-y-auto h-[300px] bg-blue-950 text-yellow-300 scroll-auto border-2 border-primary-100"
                 >
                     <AnimatePresence>
                         {codeLines.slice(0, visibleIndex).map((line, index) => (

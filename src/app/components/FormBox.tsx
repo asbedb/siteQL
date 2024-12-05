@@ -1,9 +1,9 @@
 // components/FormBox.tsx
 "use client"
 import Logo from "./Logo";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from '@nextui-org/react'
-import { ConnectionParams, DBCredentialsParams, UpdateSiteParams, UploadPfpImageParams, CreateTableParams, ShowToastParams, QueryResult } from '../../types/types'; 
+import { ConnectionParams, DBCredentialsParams, UpdateSiteParams, UploadPfpImageParams, CreateTableParams, ShowToastParams, QueryResult, FinalizeInstallQueryResult } from '../../types/types'; 
 import IntroductionStep from './IntroductionStep';
 import SqlNodeInformation from './SqlNodeInformation';
 import CredentialsInformation from './CredentialsInformation';
@@ -18,13 +18,6 @@ export default function FormBox() {
     const [step, setStep] = useState<number>(1);
     const [toastOpen, setToastOpen] = useState(false);
     const [toastMessage, setToastMessage] = useState('');
-    //effect variables
-    useEffect(() => {
-        const isInstalled = process.env.APPLICATION_INSTALLED === 'true';
-        if (isInstalled) {
-          // You can run logic here if necessary, but don't call finalizeInstall immediately
-        }
-    }, []); // Empty dependency array ensures this runs only once on mount
     
     //basic counter for installer
     const handleNext = () => {
@@ -160,6 +153,31 @@ export default function FormBox() {
         return { disablebtn: false}
     };
 
+    //FinalizeInstallation function
+    const finalizeInstall = async (): Promise<FinalizeInstallQueryResult> => {
+        try {
+            const response = await fetch('/api/connections/finalInstallCheck', {
+                method: 'GET',
+            });
+    
+            if (!response.ok) {
+                throw new Error(`API error: ${response.statusText}`);
+            }
+    
+            const data = await response.json();
+    
+            return data; // Return the parsed response as the Promise value
+        } catch (error) {
+            console.error('Error in finalizeInstall:', error);
+    
+            // Return a fallback response on error
+            return {
+                allChecksPass: false,
+                codeLines: [],
+            };
+        }
+    };
+
     //Notification System
     const showToast = ({message}: ShowToastParams) => {
         setToastMessage(message);
@@ -167,17 +185,6 @@ export default function FormBox() {
         setTimeout(() => setToastOpen(false), 3000);
     }
 
-    //FinalizeInstallation function
-    const finalizeInstall = () => {
-        if(process.env.APPLICATION_INSTALLED === 'true'){
-            showToast({message: 'Application successfully installed - page refreshing'})
-            setTimeout(()=>{
-                location.reload()
-            }, 1000)
-        }else{
-            showToast({message: 'Missing variables please refer to error messages'})
-        }
-    }
 
     //renders current installer step
     const renderFormStep = () => {
@@ -206,6 +213,7 @@ export default function FormBox() {
                         />;
             case 7:
                 return <FinaliseInstallation
+                            finalizeInstall={finalizeInstall}
                             />;
             default:
                 return <IntroductionStep/>;
@@ -234,7 +242,7 @@ export default function FormBox() {
                     <div className="row-span-1 ">
                         <div className="flex flex-row items-center justify-between px-4 w-full">
                             {step > 1 ? <Button onClick={handlePrevious}>Back</Button>: <div></div>}
-                            {step != 7 ? <Button  onClick={handleNext}>Next</Button>: <Button  onClick={finalizeInstall}>Finalize Installation</Button>}
+                            {step != 7 ? <Button  onClick={handleNext}>Next</Button>: <Button onClick={() => finalizeInstall}>Finalize Installation</Button>}
                         </div>
                     </div>
                     <Toast
