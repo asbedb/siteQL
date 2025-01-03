@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Code } from '@nextui-org/react';
-import { FinalizeInstallProps, FinalizeInstallQueryResult } from '@/types/types';
+import { FinalInstallCheckProps, FinalInstallCheckQueryResult} from '@/types/types';
 
-const FinalDBTest: React.FC<FinalizeInstallProps> = ({ finalizeInstall }) => {
+const FinalDBTest: React.FC<FinalInstallCheckProps> = ({ finalInstallCheck }) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const [visibleIndex, setVisibleIndex] = useState(0);
-    const [results, setResults] = useState<FinalizeInstallQueryResult[]>([]);
+    const [results, setResults] = useState<FinalInstallCheckQueryResult[]>([]);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
     // Simulated code lines for animation
@@ -20,7 +20,7 @@ const FinalDBTest: React.FC<FinalizeInstallProps> = ({ finalizeInstall }) => {
     const handleCheck = async () => {
         try {
             setErrorMessage(null); // Reset error
-            const response = await finalizeInstall();
+            const response = await finalInstallCheck();
             setResults(response.codeLines);
         } catch (error) {
             setErrorMessage('Failed to complete installation check.');

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import mysql from 'mysql2/promise';
-import writeEnvFile from '../../config/envWriter/route';
+import writeEnvFile from '@/utils/envWriter';
 
 //global variable for allChecksPassed
 let allChecksPass: boolean = false;

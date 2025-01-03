@@ -1,7 +1,7 @@
 // src/app/api/connections/createTable/route.ts
 import { NextResponse, NextRequest } from 'next/server';
 import mysql from 'mysql2/promise'; 
-import writeEnvFile from '../../config/envWriter/route';
+import writeEnvFile from '@/utils/envWriter';
 
 async function getConnection() {
     const host = process.env.DB_HOST;

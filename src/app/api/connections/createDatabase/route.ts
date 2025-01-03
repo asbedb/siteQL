@@ -1,7 +1,7 @@
 // src/app/api/connections/createDatabase/route.ts
 import { NextResponse, NextRequest } from 'next/server';
 import mysql from 'mysql2/promise'; 
-import writeEnvFile from '../../config/envWriter/route';
+import writeEnvFile from '@/utils/envWriter';
 
 export async function POST(request: NextRequest) {
     const { host, user, password, dbName } = await request.json();

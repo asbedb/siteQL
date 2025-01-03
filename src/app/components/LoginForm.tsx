@@ -21,7 +21,7 @@ export default function LoginForm() {
 
     const loginCredentials = async ({ email, userPassword }: LoginCredentialsParams) => {
         try {
-            const response = await fetch('/api/connections/updateCredentials', {
+            const response = await fetch('/api/connections/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, userPassword }),
