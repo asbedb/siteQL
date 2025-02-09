@@ -1,7 +1,7 @@
 // components/FormBox.tsx
 "use client"
 import Logo from "./Logo";
-import { useState } from "react";
+import { useState} from "react";
 import { Button } from '@nextui-org/react'
 import {    ConnectionParams, 
             DBCredentialsParams, 
@@ -27,6 +27,7 @@ export default function FormBox() {
     const [toastOpen, setToastOpen] = useState(false);
     const [toastMessage, setToastMessage] = useState('');
     const [disableBtn, setDisableBtn] = useState<boolean>(true);
+
 
     //basic counter for installer
     const handleNext = () => {
@@ -252,41 +253,39 @@ export default function FormBox() {
 
 
     return(
-        <div className="p-5 h-screen md:p-20 overflow-y-hidden">
-            <div className="grid grid-cols-1 
-                grid-rows-12 
-                w-full 
-                h-full 
+            <div className="
+                flex
+                flex-col
+                w-full
+                h-full
                 items-center 
                 text-center 
                 rounded-xl 
                 bg-primary-50
                 ">
-                    <div className="flex flex-col items-center justify-center row-span-4 h-auto ">    
+                    <div className="flex flex-col items-center justify-center h-auto ">    
                         <Logo/>
                     </div>
-                    <div className="row-span-7 overflow-auto h-full">
+                    <div className="flex overflow-auto h-full w-full text-center justify-center">
                         {renderFormStep()}  
                     </div>
-                    <div className="row-span-1 ">
-                        <div className="flex flex-row items-center justify-between px-4 w-full">
-                            {step > 1 ? <Button onClick={handlePrevious}>Back</Button>: <div></div>}
-                            {step != 7 ? 
-                                <Button  onClick={handleNext}>Next</Button>: 
-                                <Button 
-                                    isDisabled={disableBtn} 
-                                    variant={disableBtn? 'light': 'solid'}
-                                    color={disableBtn? 'default': 'success'}
-                                    onClick={finishInstallation}
-                                    >Finalize Installation</Button>}
-                        </div>
+                    <div className="flex flex-row items-center justify-between p-8 w-full">
+                        {step > 1 ? <Button onClick={handlePrevious}>Back</Button>: <div></div>}
+                        {step != 7 ? 
+                            <Button  onClick={handleNext}>Next</Button>: 
+                            <Button 
+                                isDisabled={disableBtn} 
+                                variant={disableBtn? 'light': 'solid'}
+                                color={disableBtn? 'default': 'success'}
+                                onClick={finishInstallation}
+                                >Finalize Installation</Button>}
                     </div>
+
                     <Toast
                         message={toastMessage}
                         isOpen={toastOpen}
                         onClose={() => setToastOpen(false)}
                     />
             </div>
-        </div>
     )
 }

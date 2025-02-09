@@ -159,7 +159,7 @@ const CustomTable: React.FC<CustomTableProps> = ({ createTable }) => {
     };
 
     return (
-        <div className="border border-primary-200 rounded-lg mx-4 p-4 mt-14">
+        <div className="flex flex-col w-full border border-primary-200 rounded-lg mx-4 p-4 mt-14">
             <span className='text-xl font-bold'>Add a Custom Table:</span>
             <div id="table-name" className="my-4">
                 <Input
