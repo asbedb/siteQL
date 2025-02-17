@@ -57,9 +57,9 @@ Before running the application, ensure your SQL database service is active and r
 
 This step is crucial because siteQL requires an active database connection to function properly. Without a running SQL service, you may encounter connection errors when trying to start the application.
 
-### 11. Start the web socket server
+### 11. Start the NextJS frontend server
 
    ```sh
-   npm run dev:wss
+   npm run dev
    ```
 Open your browser and visit <http://localhost:3000> to see the application running.
