@@ -23,7 +23,7 @@ In addition whilst not required a front end tool such as [phpMyAdmin](https://ww
 
 ## Installation
 To install siteQL locally
-1. Make sure you have completed the [prerequisites](#prerequisites).
+# 1. Make sure you have completed the [prerequisites](#prerequisites).
 
 2. (Optional) [Fork](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/fork-a-repo) the repository as your own repo if you wish to build a project on top of siteQL.
 
