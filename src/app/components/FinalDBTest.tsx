@@ -7,23 +7,27 @@ const FinalDBTest: React.FC<FinalInstallCheckProps> = ({ finalInstallCheck }) =>
     const containerRef = useRef<HTMLDivElement>(null);
     const [visibleIndex, setVisibleIndex] = useState(0);
     const [results, setResults] = useState<FinalInstallCheckQueryResult[]>([]);
-    const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const [errorMessage, setErrorMessage] = useState<string>("");
 
     // Simulated code lines for animation
-    const codeLines = results.map(
+    const codeLines = results?.map(
         (result) => `${result.codeLines}`
-    );
+    ) || [];
 
     // Check if all checks passed
     const allChecksPass = results.every((result) => result.allChecksPass === true);
 
     const handleCheck = async () => {
         try {
-            setErrorMessage(null); // Reset error
+            setErrorMessage(""); // Reset error
             const response = await finalInstallCheck();
             setResults(response.codeLines);
         } catch (error) {
-            setErrorMessage('Failed to complete installation check.');
+            if(error instanceof Error){
+                setErrorMessage('Failed to complete installation check.');
+                codeLines.push(errorMessage)
+            }
+
             console.error(error);
         }
     };
@@ -44,7 +48,7 @@ const FinalDBTest: React.FC<FinalInstallCheckProps> = ({ finalInstallCheck }) =>
         if (containerRef.current) {
             containerRef.current.scrollTop = containerRef.current.scrollHeight;
         }
-    }, [visibleIndex]);
+    }, [visibleIndex, codeLines.length]);
 
     const lineVariants = {
         hidden: { opacity: 0, x: -20 },
@@ -56,7 +60,7 @@ const FinalDBTest: React.FC<FinalInstallCheckProps> = ({ finalInstallCheck }) =>
     };
 
     return (
-        <div className="w-full">
+        <div className="flex w-full h-full flex-col">
             <button
                 onClick={handleCheck}
                 className="mb-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"

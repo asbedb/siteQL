@@ -57,7 +57,7 @@ function SqlNodeInformation({ connectCreateDB }: SqlNodeInformationProps) {
     };
 
     return (
-        <div className='p-12'>
+        <div className='flex w-full h-full flex-col'>
             <span className='text-2xl font-semibold'>Start With Your SQL Node Information</span>
             <form onSubmit={handleSubmit}>
                 <Input
@@ -105,10 +105,11 @@ function SqlNodeInformation({ connectCreateDB }: SqlNodeInformationProps) {
                     checked={blankDbPass}
                     color='success' 
                     onChange={(e) => setBlankDbPass(e.target.checked)} 
-                    size="lg">
-                    Blank Pass {'(DevOps)'}
+                    size="lg"
+                    className='py-4'>
+                    {'Blank Pass (DevOps)'}
                 </Checkbox>
-                <div className='flex flex-row items-center justify-between w-full'>
+                <div className='flex flex-row items-center justify-between w-full '>
                     <div>
                         <Button onClick={resetForm}>Reset Values</Button>
                     </div>

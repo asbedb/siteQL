@@ -47,7 +47,7 @@ export default function CredentialsInformation({ updateCredentials}: UpdateCrede
         
     };
     return (
-    <div className='p-12'>
+    <div className='flex w-full h-full flex-col'>
         <span className='text-2xl font-semibold'>Setup your Credentials</span>
         <form onSubmit={handleSubmit}>
             <Input

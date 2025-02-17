@@ -84,7 +84,7 @@ export default function PfpImage({ uploadPfpImages }: UploadImagesProps) {
     }, [userPfpUrl, sitePfpUrl]);
 
     return (
-        <div className='p-12'>
+        <div className='flex w-full h-full flex-col'>
             <span className='text-2xl font-semibold'>Images for your Site/Profile</span> 
             {/* Existing Profile Images */}
             {userData && (

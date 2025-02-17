@@ -28,7 +28,7 @@ export default function SiteInformation ({ updateSiteInformation}: UpdateSiteInf
     }
 
     return (
-    <div className='p-12'>
+    <div className='flex w-full h-full flex-col'>
         <span className='text-2xl font-semibold'>Some Information about your application</span>
         <form onSubmit={handleSubmit}>
             <Input

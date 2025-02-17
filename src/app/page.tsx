@@ -37,7 +37,7 @@ export default function Home() {
           <div ref={serviceBar} className="flex flex-col w-full">
             <ServiceBar  />
           </div>
-          <div className="flex items-center justify-center w-full h-full md:p-20" id="content-area">
+          <div className="flex items-center justify-center w-full h-full md:p-8" id="content-area">
             {!isInstalled && (
                   <FormBox />
               )}

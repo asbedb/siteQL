@@ -209,12 +209,14 @@ export default function FormBox() {
             };
         }
     }
+
     //Notification System
     const showToast = ({message}: ShowToastParams) => {
         setToastMessage(message);
         setToastOpen(true);
         setTimeout(() => setToastOpen(false), 3000);
     }
+    
     //renders current installer step
     const renderFormStep = () => {
         switch (step) {
@@ -260,13 +262,12 @@ export default function FormBox() {
                 h-full
                 items-center 
                 text-center 
+                justify-center
                 rounded-xl 
                 bg-primary-50
-                ">
-                    <div className="flex flex-col items-center justify-center h-auto ">    
-                        <Logo/>
-                    </div>
-                    <div className="flex overflow-auto h-full w-full text-center justify-center">
+                ">   
+                    <Logo/>
+                    <div className="flex overflow-auto h-full w-full text-center justify-center px-12">
                         {renderFormStep()}  
                     </div>
                     <div className="flex flex-row items-center justify-between p-8 w-full">
@@ -280,7 +281,6 @@ export default function FormBox() {
                                 onClick={finishInstallation}
                                 >Finalize Installation</Button>}
                     </div>
-
                     <Toast
                         message={toastMessage}
                         isOpen={toastOpen}
