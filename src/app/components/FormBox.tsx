@@ -170,7 +170,7 @@ export default function FormBox() {
                 method: 'GET',
             }); 
             if (!response.ok) {
-                throw new Error(`API error: ${response.statusText}`);
+                throw new Error(`API error (Check SQL Server Status): ${response.statusText}`);
             }
             const data = await response.json();
             return data;
@@ -179,7 +179,7 @@ export default function FormBox() {
             // Return a fallback response on error
             return {
                 allChecksPass: false,
-                codeLines: [],
+                codeLines: [`Error: ${error instanceof Error ? error.message : 'Unknown error'}`],
             };
         }
     };

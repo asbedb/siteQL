@@ -1,3 +1,4 @@
+// src/app/api/connections/finalInstallCheck/route.ts
 import { NextResponse } from 'next/server';
 import mysql from 'mysql2/promise';
 import writeEnvFile from '@/utils/envWriter';
@@ -34,7 +35,7 @@ async function handleGet() {
             status: 'error',
             message: 'Missing required environment variables.',
             details: { host, user, dbName, tableName },
-        });
+        }, {status: 400});
     }
 
     const results: CheckResult[] = [];

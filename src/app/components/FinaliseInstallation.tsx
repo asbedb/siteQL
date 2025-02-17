@@ -1,3 +1,4 @@
+//component/FinaliseInstallation.tsx
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Code, Button } from '@nextui-org/react';
@@ -6,45 +7,50 @@ import { FinalInstallCheckProps } from '@/types/types';
 const FinaliseInstallation: React.FC<FinalInstallCheckProps> = ({ finalInstallCheck, setDisableBtn }) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const [visibleIndex, setVisibleIndex] = useState(0);
-    const [results, setResults] = useState<[]>([]);
+    const [results, setResults] = useState<string[]>([]);
     const [status, setStatus] = useState<string | null>(null);
-    const [runInstallBtnDisable, setRunInstallButtonDisable] = useState<boolean>(false)
+    const [runInstallBtnDisable, setRunInstallButtonDisable] = useState<boolean>(false);
 
     const handleCheck = async () => {
+        let message : string = "Running installation check...";
         try {
-            setStatus('Running installation check...');
-            setRunInstallButtonDisable(true)
-            setResults([])
-            setVisibleIndex(0)
-            setDisableBtn(true)
-            const response = await finalInstallCheck();
-            setTimeout(()=>{
-                setResults(response.codeLines); // Set the results from the response
-                setTimeout(()=>{
-                    setStatus('Installation Check Complete - Passed!');
-                    setDisableBtn(!response.allChecksPass);
-                    setRunInstallButtonDisable(false)
-                },10000)
-            },1000)
+            setRunInstallButtonDisable(true);
+            setResults([]);
+            setVisibleIndex(0);
+            setDisableBtn(true);
+            setStatus(message);
 
+            //finalInstallCheck is a property passed through funcfactory in formbox.tsx
+            const response = await finalInstallCheck();
+
+            setTimeout(()=>{
+                setResults(response.codeLines); 
+                message = response.allChecksPass ? "Installation Check Complete - Passed!" : "Installation Check Complete - Failed!"
+                setStatus(message)
+                setDisableBtn(!response.allChecksPass);
+                setRunInstallButtonDisable(false)
+            },10000)
             
         } catch (error) {
-            setStatus('Installation check failed');
-            console.error(error);
-            setDisableBtn(true);
+            if(error instanceof Error){
+                message = "Installation check failed"
+                setDisableBtn(true)
+            }
         }
+        setStatus(message)
     };
 
     // Simulate animated lines appearance
     useEffect(() => {
-        if (visibleIndex >= results.length) return;
+        if (!Array.isArray(results)) return
+        if (visibleIndex >= results.length) return
 
         const timer = setTimeout(() => {
-            setVisibleIndex((prev) => prev + 1);
+            setVisibleIndex((prev) => prev + 1)
         }, 1000);
 
         return () => clearTimeout(timer);
-    }, [visibleIndex, results.length]);
+    }, [visibleIndex, results]);
 
     // Scroll container when new lines appear
     useEffect(() => {
@@ -71,7 +77,6 @@ const FinaliseInstallation: React.FC<FinalInstallCheckProps> = ({ finalInstallCh
             >
                 Run Final Install Check
             </Button>
-
             {status && (
                 <div className="text-sm mb-2">
                     <p>Status: {status}</p>

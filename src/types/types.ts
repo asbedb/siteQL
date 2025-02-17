@@ -6,7 +6,7 @@ export interface QueryResult {
 }
 export interface FinalInstallCheckQueryResult {
     allChecksPass: boolean;
-    codeLines: [];
+    codeLines: string[];
 }
 
 //PARAMS
