@@ -124,7 +124,9 @@ Upon successful creation of both the database and table, this endpoint automatic
 
 ### createTable
 Request Type: POST()
+
 Primary Function:
+
 The createTable API endpoint handles the creation and management of database tables based on validated POST data from the application. Its key functions include:
 
 1. Validating the table specification data received in the POST request
@@ -136,6 +138,7 @@ The createTable API endpoint handles the creation and management of database tab
 Request Type: GET() POST()
 
 Primary Function:
+
 The finalInstallCheck API endpoint serves a dual purpose through bouth GET and POST requests.
 
 1. GET() Request:
@@ -155,6 +158,7 @@ Upon receiving confirmation that all tests have passed successfully the POST() r
 Request Type: POST()
 
 Primary Function:
+
 The login API endpoint processes authentication requests from the LoginForm component by:
 
 * Accepting user credentials (typically email/username and password) from the form submission
@@ -166,6 +170,7 @@ The login API endpoint processes authentication requests from the LoginForm comp
 Request Type: GET()
 
 Primary Function:
+
 The siteDataRender API endpoint retrieves information from the ``main`` database to render on relevant components. The current implementation returns:
 
 * user_email
@@ -180,11 +185,14 @@ The siteDataRender API endpoint retrieves information from the ``main`` database
 Request Type: GET()
 
 Primary Function:
+
 The sqlServicePing API endpoint essentially pings the SQL Server (based on details in env file) and returns a status of success or fail which in turn can be rendered in various ways. Currently it is being utlised to render the ServicePing component. 
 
 ### updateCredentials
 Request Type: POST()
+
 Primary Function:
+
 The updateCredentails API endpoint is used to create and store credentials (full name, user email, password) within the ``main`` database allowing the user to login post installation. Should the user already exist the API will overwrite the current username and password with the updated details. 
 
 ### updateDatabase
@@ -195,5 +203,7 @@ The updateDatabse API endpoint is used to create and store information associate
 
 ### imageUploader
 Request Type: POST()
+
 Primary Function:
+
 The image uploader API endpoint ensures that images are stored in the ``public/img folder``. It categorizes and datestamps each image to maintain a history for future reference. This system serves the most recently uploaded image as the primary profile picture for both users and applications, while also keeping previous versions accessible
