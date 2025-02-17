@@ -38,12 +38,12 @@ export default function FormBox() {
     };
 
     //creates and connects to the database.
-    const connectCreateDB = async ({ host, user, password, dbName }: ConnectionParams): Promise<QueryResult> => {
+    const connectCreateDB = async ({ host, port, user, password, dbName,  }: ConnectionParams): Promise<QueryResult> => {
         try {
             const response = await fetch('/api/connections/createDatabase', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ host, user, password, dbName }),
+                body: JSON.stringify({ host, port, user, password, dbName }),
             });
             const result = await response.json();
             if (response.ok) {

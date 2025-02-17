@@ -9,6 +9,7 @@ function SqlNodeInformation({ connectCreateDB }: SqlNodeInformationProps) {
     const [host, setHost] = useState('0.0.0.0');
     const [user, setUser] = useState('root');
     const [dbName, setDbName] = useState('newApp');
+    const [port, setPort] = useState('3306');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [blankDbPass, setBlankDbPass] = useState<boolean>(false); 
@@ -26,6 +27,7 @@ function SqlNodeInformation({ connectCreateDB }: SqlNodeInformationProps) {
 
     const resetForm = () =>{
         setHost('0.0.0.0');
+        setPort('3306')
         setUser('root');
         setDbName('newApp');
         setPassword('');
@@ -34,9 +36,10 @@ function SqlNodeInformation({ connectCreateDB }: SqlNodeInformationProps) {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+        const portNumber = parseInt(port, 10)
         // Basic validation
-        if (!host || !user || !dbName) {
-            setToastMessage('Host, User, and Database Name are required.');
+        if (!host || !user || !dbName || !port) {
+            setToastMessage('Host, User, Port and Database names are required.');
             setToastOpen(true);
             return;
         }
@@ -50,8 +53,11 @@ function SqlNodeInformation({ connectCreateDB }: SqlNodeInformationProps) {
             setToastOpen(true);
             return
         }
+        if(isNaN(portNumber)){
+            setToastMessage('The port specificed must be a number ')
+        }
         // Ensure that the result is a QueryResult object with a success property
-        const { disablebtn } = await connectCreateDB({ host, user, password, dbName });
+        const { disablebtn } = await connectCreateDB({ host, port, user, password, dbName });
         // Set the button disabled state based on success or failure
         setIsButtonDisabled(disablebtn );
     };
@@ -67,6 +73,14 @@ function SqlNodeInformation({ connectCreateDB }: SqlNodeInformationProps) {
                     placeholder="Default: 0.0.0.0"
                     value={host} 
                     onChange={(e) => setHost(e.target.value)}
+                    className='py-2' />
+                <Input
+                    isRequired 
+                    type="text" 
+                    label="Port"
+                    placeholder="Default: 3306"
+                    value={port} 
+                    onChange={(e) => setPort(e.target.value)}
                     className='py-2' />
                 <Input 
                     isRequired

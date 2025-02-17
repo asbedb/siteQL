@@ -23,7 +23,7 @@ export default function ServicePing() {
 
     return (
         <div >
-            <Tooltip className='text-foreground' content={isRunning === null ? 'Checking Status...' : isRunning ? 'SQL Service is Running' : 'SQL Service is not running'}>
+            <Tooltip className='text-foreground' content={isRunning === null ? 'Checking Status...' : isRunning ? 'SQL Service is Running' : 'SQL Service is not Connected - Check your SQL Node Settings'}>
             <div
                     className={`w-10 h-10 rounded-full bg-${isRunning === null ? 'warning' : isRunning ? 'success' : 'danger'} mr-2`} // Adjust size with w- and h- classes
             />

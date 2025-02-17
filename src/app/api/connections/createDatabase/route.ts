@@ -4,9 +4,13 @@ import mysql from 'mysql2/promise';
 import writeEnvFile from '@/utils/envWriter';
 
 export async function POST(request: NextRequest) {
-    const { host, user, password, dbName } = await request.json();
+    const { host, port, user, password, dbName } = await request.json();
+    const portNumber = parseInt(port, 10)
+    if (isNaN(portNumber)) {
+        return NextResponse.json({ message: 'Invalid port number' }, { status: 400 });
+    }
     try {
-        const connection = await mysql.createConnection({ host, user, password });
+        const connection = await mysql.createConnection({ host,  user, password, port: portNumber });
         await connection.query(`CREATE DATABASE IF NOT EXISTS \`${dbName}\`;`);
         await connection.query(`USE \`${dbName}\`;`);
         await connection.query(`CREATE TABLE IF NOT EXISTS main (
@@ -24,6 +28,7 @@ export async function POST(request: NextRequest) {
         );`);
         await writeEnvFile({
             DB_HOST: host,
+            DB_PORT: port,
             DB_USER: user,
             DB_PASSWORD: password, // Store the hashed password
             DB_NAME: dbName,

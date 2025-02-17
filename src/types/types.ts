@@ -17,6 +17,7 @@ export interface CreateTableParams {
 
 export interface ConnectionParams {
     host: string;
+    port: string;
     user: string;
     password: string;
     dbName: string;
@@ -55,7 +56,7 @@ export interface FinalInstallCheckProps {
     setDisableBtn: (state: boolean) => void;
 }
 export interface SqlNodeInformationProps {
-    connectCreateDB: (data: { host: string; user: string; password: string; dbName: string }) => Promise<QueryResult>;
+    connectCreateDB: (data: { host: string; port: string; user: string; password: string; dbName: string }) => Promise<QueryResult>;
 }
 export interface UpdateCredentialsProps {
     updateCredentials: (data: { fullName: string; email: string; password: string; }) => Promise<QueryResult>;

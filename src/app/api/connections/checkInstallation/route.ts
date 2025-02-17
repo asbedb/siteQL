@@ -4,31 +4,36 @@ import mysql from 'mysql2/promise';
 
 export async function GET() {
     const host = process.env.DB_HOST;
+    const port = process.env.DB_PORT;
     const user = process.env.DB_USER;
     const dbName = process.env.DB_NAME;
     const password = process.env.DB_PASSWORD || '';
     const tableName = process.env.DB_TABLE_NAME;
     const customTables = process.env.DB_CUSTOM_TABLE;
 
+    const portNumber = parseInt(port ? port : '3306', 10)
+
     const pendingInstallation: string[] = [];
     if (!host) pendingInstallation.push('Host');
+    if (!port) pendingInstallation.push('Port')
     if (!user) pendingInstallation.push('DB User Name');
     if (!dbName) pendingInstallation.push('DB Name');
     if (!tableName) pendingInstallation.push('Main Application Table');
 
     const installedVariables: string[] = [];
-    if (host) installedVariables.push('Host: ' + host);
-    if (user) installedVariables.push('DB User Name: ' + user);
-    if (dbName) installedVariables.push('DB Name: ' + dbName);
-    if (tableName) installedVariables.push('Main DB Table Name: ' + tableName);
-    if (customTables) installedVariables.push('Additional Custom Tables: ' + customTables);
+    if (host) installedVariables.push(`Host: ${host}`);
+    if (port) installedVariables.push(`Port: ${port}`)
+    if (user) installedVariables.push(`DB User Name: ${user}`);
+    if (dbName) installedVariables.push(`DB Name: ${dbName}`);
+    if (tableName) installedVariables.push(`Main DB Table Name: ${tableName}`);
+    if (customTables) installedVariables.push(`Additional Custom Tables: ${customTables}`);
 
     let connectionStatus = 'DB Connection Unsuccessful, please check DB Variables/Reinstall';
     let connectionErrorMessage = '';
     let connection;
 
     try {
-        connection = await mysql.createConnection({ host, user, password, database: dbName });
+        connection = await mysql.createConnection({ host, port: portNumber, user, password, database: dbName });
         await connection.ping(); // Check if the database is responsive
         console.log('Database connection successful.');
         connectionStatus = `🟢 DB Connection to ${dbName} was successful`;

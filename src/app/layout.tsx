@@ -3,7 +3,7 @@ import {NextUIProvider} from "@nextui-org/react";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "SiteQL",
+  title: "siteQL",
   description: "Update and Deploy your SQL WebApps with Ease",
 };
 
