@@ -12,7 +12,7 @@ The installer goes through a guided form and finalises with a database configura
 ## Table of Contents
 - [Prerequisites](#Prerequisites)
 - [Installation](#installation)
-
+- [API's](#API's)
 
 
 
@@ -63,3 +63,29 @@ This step is crucial because siteQL requires an active database connection to fu
    npm run dev
    ```
 Open your browser and visit <http://localhost:3000> to see the application running.
+
+## API's
+
+### Connections
+- [checkInstallation](#checkInstallation)
+- [createDatabase](#createDatabase)
+- [createTable](#createTable)
+- [finalInstallCheck]
+- [login]
+- [siteDataRender]
+- [sqlServicePing]
+- [updateCredentials]
+- [updateDatabase]
+
+### Config
+- [imageUploader]
+
+
+#### checkInstallation
+abc
+
+
+#### createDatabase
+
+
+#### createTable
