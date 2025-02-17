@@ -6,7 +6,7 @@ import { SqlNodeInformationProps } from '../../types/types';
 
 function SqlNodeInformation({ connectCreateDB }: SqlNodeInformationProps) {
     //State variables
-    const [host, setHost] = useState('localhost');
+    const [host, setHost] = useState('0.0.0.0');
     const [user, setUser] = useState('root');
     const [dbName, setDbName] = useState('newApp');
     const [password, setPassword] = useState('');
@@ -25,7 +25,7 @@ function SqlNodeInformation({ connectCreateDB }: SqlNodeInformationProps) {
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
     const resetForm = () =>{
-        setHost('localhost');
+        setHost('0.0.0.0');
         setUser('root');
         setDbName('newApp');
         setPassword('');
@@ -64,7 +64,7 @@ function SqlNodeInformation({ connectCreateDB }: SqlNodeInformationProps) {
                     isRequired 
                     type="text" 
                     label="Host"
-                    placeholder="Default: localhost"
+                    placeholder="Default: 0.0.0.0"
                     value={host} 
                     onChange={(e) => setHost(e.target.value)}
                     className='py-2' />
