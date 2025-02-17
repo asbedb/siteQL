@@ -78,12 +78,14 @@ Open your browser and visit <http://localhost:3000> to see the application runni
 - [updateDatabase](#updatedatabase)
 
 #### Config API's
-- [imageUploader]
+- [imageUploader](#imageuploader)
 
 
 ### checkInstallation
 Request Type: GET()
+
 Primary Function:
+
 The checkInstallation API endpoint verifies the application's connection status to the SQL backend database. It examines local environment variables (accessed through process.env) and returns:
 
 1. The current connection status to the database
@@ -94,7 +96,9 @@ This endpoint is served through a popover component to help quickly identify con
 
 ### createDatabase
 Request Type: POST()
+
 Primary Function:
+
 The createDatabase API endpoint initializes the application's database infrastructure by:
 
 1. Creating a Primary database for the application.
@@ -130,6 +134,7 @@ The createTable API endpoint handles the creation and management of database tab
 
 ### finalInstallCheck
 Request Type: GET() POST()
+
 Primary Function:
 The finalInstallCheck API endpoint serves a dual purpose through bouth GET and POST requests.
 
@@ -148,6 +153,7 @@ Upon receiving confirmation that all tests have passed successfully the POST() r
 
 ### login
 Request Type: POST()
+
 Primary Function:
 The login API endpoint processes authentication requests from the LoginForm component by:
 
@@ -158,6 +164,7 @@ The login API endpoint processes authentication requests from the LoginForm comp
 
 ### siteDataRender
 Request Type: GET()
+
 Primary Function:
 The siteDataRender API endpoint retrieves information from the ``main`` database to render on relevant components. The current implementation returns:
 
@@ -171,6 +178,7 @@ The siteDataRender API endpoint retrieves information from the ``main`` database
 
 ### sqlServicePing
 Request Type: GET()
+
 Primary Function:
 The sqlServicePing API endpoint essentially pings the SQL Server (based on details in env file) and returns a status of success or fail which in turn can be rendered in various ways. Currently it is being utlised to render the ServicePing component. 
 
@@ -181,6 +189,7 @@ The updateCredentails API endpoint is used to create and store credentials (full
 
 ### updateDatabase
 Request Type: POST()
+
 Primary Function:
 The updateDatabse API endpoint is used to create and store information associated with the application in the ``main`` database (location, app title, about app). Should information already exist the endpoint will overwrite details accordingly
 
