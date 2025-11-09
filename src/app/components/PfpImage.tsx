@@ -1,7 +1,10 @@
 // components/PfpImage.tsx
-import { useState, useEffect } from 'react';
-import { Input, Image, Button } from '@nextui-org/react';
-import { UploadImagesProps } from '@/types/types';
+import { useState, useEffect } from "react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import Image from "next/image";
+import { UploadImagesProps } from "@/types/types";
 
 type UserData = {
     pfp_image: string | null;
@@ -10,9 +13,9 @@ type UserData = {
 export default function PfpImage({ uploadPfpImages }: UploadImagesProps) {
     //file variables
     const [sitePfpFile, setSitePfpFile] = useState<File | null>(null);
-    const [sitePfpFileName, setSitePfpFileName] = useState('');
-    const [userPfpFile, setUserPfpFile] = useState<File| null>(null);
-    const [userPfpFileName, setUserPfpFileName] = useState('');
+    const [sitePfpFileName, setSitePfpFileName] = useState("");
+    const [userPfpFile, setUserPfpFile] = useState<File | null>(null);
+    const [userPfpFileName, setUserPfpFileName] = useState("");
     //url variables
     const [userPfpUrl, setUserPfpUrl] = useState<string | null>(null);
     const [sitePfpUrl, setSitePfpUrl] = useState<string | null>(null);
@@ -20,24 +23,28 @@ export default function PfpImage({ uploadPfpImages }: UploadImagesProps) {
     const [userData, setUserData] = useState<UserData | null>(null);
     //button disabled vaeriables
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
+    const [errorMessage, setErrorMessage] = useState("");
 
     // Fetch user data on mount
     const fetchUserData = async () => {
         try {
-            const response = await fetch('/api/connections/siteDataRender');
+            const response = await fetch("/api/connections/siteDataRender");
             const data = await response.json();
-            if (!response.ok) throw new Error(data.error || 'Failed to fetch user data');
+            if (!response.ok)
+                throw new Error(data.error || "Failed to fetch user data");
             setUserData(data);
-            setUserPfpUrl(data.pfp_image ? `img/userpfp/${data.pfp_image}` : null);
-            setSitePfpUrl(data.app_image ? `img/sitepfp/${data.app_image}` : null);
+            setUserPfpUrl(
+                data.pfp_image ? `img/userpfp/${data.pfp_image}` : null
+            );
+            setSitePfpUrl(
+                data.app_image ? `img/sitepfp/${data.app_image}` : null
+            );
         } catch (err) {
-            if (err instanceof Error){
+            if (err instanceof Error) {
                 setErrorMessage(err.message);
             } else {
-                setErrorMessage('Unknown Error');
+                setErrorMessage("Unknown Error");
             }
-                
         }
     };
 
@@ -48,29 +55,32 @@ export default function PfpImage({ uploadPfpImages }: UploadImagesProps) {
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const selectedFile = event.target.files?.[0];
         if (!selectedFile) return;
-        if (event.target.id === 'userPfp') {
+        if (event.target.id === "userPfp") {
             setUserPfpFile(selectedFile);
             setUserPfpFileName(selectedFile.name);
             setUserPfpUrl(URL.createObjectURL(selectedFile));
-        } else if (event.target.id === 'sitePfp') {
+        } else if (event.target.id === "sitePfp") {
             setSitePfpFile(selectedFile);
             setSitePfpFileName(selectedFile.name);
-            setSitePfpUrl(URL.createObjectURL(selectedFile)); 
+            setSitePfpUrl(URL.createObjectURL(selectedFile));
         }
     };
-    
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const { disablebtn } = await uploadPfpImages({ sitePfp: sitePfpFile, userPfp: userPfpFile });
+        const { disablebtn } = await uploadPfpImages({
+            sitePfp: sitePfpFile,
+            userPfp: userPfpFile,
+        });
         // Set the button disabled state based on success or failure
-        setIsButtonDisabled(disablebtn );
+        setIsButtonDisabled(disablebtn);
     };
 
     const handleReset = () => {
         setSitePfpFile(null);
-        setSitePfpFileName('');
+        setSitePfpFileName("");
         setUserPfpFile(null);
-        setUserPfpFileName('');
+        setUserPfpFileName("");
         setUserPfpUrl(null);
         setSitePfpUrl(null);
         setIsButtonDisabled(false);
@@ -84,8 +94,10 @@ export default function PfpImage({ uploadPfpImages }: UploadImagesProps) {
     }, [userPfpUrl, sitePfpUrl]);
 
     return (
-        <div className='flex w-full h-full flex-col'>
-            <span className='text-2xl font-semibold'>Images for your Site/Profile</span> 
+        <div className="flex w-full h-full flex-col">
+            <span className="text-2xl font-semibold">
+                Images for your Site/Profile
+            </span>
             {/* Existing Profile Images */}
             {userData && (
                 <div className="flex flex-col items-center">
@@ -95,7 +107,7 @@ export default function PfpImage({ uploadPfpImages }: UploadImagesProps) {
                                 <Image
                                     src={`img/userpfp/${userData.pfp_image}`}
                                     alt="Current Profile"
-                                    className="h-[90px] w-[90px] rounded-full object-cover "  // Ensures image covers the area without stretching
+                                    className="h-[90px] w-[90px] rounded-full object-cover " // Ensures image covers the area without stretching
                                 />
                                 <p className="mt-2">Current User Image</p>
                             </div>
@@ -105,7 +117,7 @@ export default function PfpImage({ uploadPfpImages }: UploadImagesProps) {
                                 <Image
                                     src={`img/sitepfp/${userData.app_image}`}
                                     alt="Current Site Image"
-                                    className="h-[90px] w-[90px] rounded-full object-cover"  // Ensures image covers the area without stretching
+                                    className="h-[90px] w-[90px] rounded-full object-cover" // Ensures image covers the area without stretching
                                 />
                                 <p className="mt-2">Current Site Image</p>
                             </div>
@@ -113,64 +125,78 @@ export default function PfpImage({ uploadPfpImages }: UploadImagesProps) {
                     </div>
                 </div>
             )}
-            {errorMessage && <p className='text-red-500'>{errorMessage}</p>}
+            {errorMessage && <p className="text-red-500">{errorMessage}</p>}
 
-            <form onSubmit={handleSubmit}> 
-                <div className='flex flex-col md:flex-row min-w-full justify-center items-center mt-4 gap-4'>
-                    <div className='flex flex-col border border-primary-200 rounded-xl p-4 w-full shadow-lg justify-center items-center'>
-                        <Input
-                            type="file" 
-                            label="Upload Profile Image"
-                            id='userPfp'
-                            name='userPfp'
-                            onChange={handleFileChange}
-                            accept="image/png, image/jpeg" 
-                            className='py-2' 
-                            aria-label="Profile Image Upload"
-                        />
+            <form onSubmit={handleSubmit}>
+                <div className="flex flex-col md:flex-row min-w-full justify-center items-center mt-4 gap-4">
+                    <div className="flex flex-col border border-primary-200 rounded-xl p-4 w-full shadow-lg justify-center items-center">
+                        <div className="grid w-full items-center gap-1.5 py-2">
+                            <Label htmlFor="userPfp">
+                                Upload Profile Image
+                            </Label>
+                            <Input
+                                type="file"
+                                id="userPfp"
+                                name="userPfp"
+                                onChange={handleFileChange}
+                                accept="image/png, image/jpeg"
+                                className="py-2"
+                                aria-label="Profile Image Upload"
+                            />
+                        </div>
+
                         {userPfpUrl && (
                             <>
-                                <p className='font-semibold text-lg leading-snug'>Selected Profile Image: <br/>{userPfpFileName}</p>
+                                <p className="font-semibold text-lg leading-snug">
+                                    Selected Profile Image: <br />
+                                    {userPfpFileName}
+                                </p>
                                 <Image
                                     src={userPfpUrl}
                                     alt="Profile Preview"
-                                    className='h-[90px] w-[90px] rounded-full'
+                                    className="h-[90px] w-[90px] rounded-full"
                                 />
                             </>
                         )}
                     </div>
-                    <div className='flex flex-col border border-primary-200 rounded-xl p-4 w-full shadow-lg justify-center items-center'>
-                        <Input
-                            type="file" 
-                            label="Upload Site Image"
-                            id='sitePfp'
-                            name='sitePfp'
-                            accept="image/png, image/jpeg" 
-                            onChange={handleFileChange}
-                            className='py-2' 
-                            aria-label="Site Image Upload"
-                        />
+                    <div className="flex flex-col border border-primary-200 rounded-xl p-4 w-full shadow-lg justify-center items-center">
+                        <div className="grid w-full items-center gap-1.5 py-2">
+                            <Label htmlFor="sitePfp">Upload Site Image</Label>
+                            <Input
+                                type="file"
+                                id="sitePfp"
+                                name="sitePfp"
+                                accept="image/png, image/jpeg"
+                                onChange={handleFileChange}
+                                className="py-2"
+                                aria-label="Site Image Upload"
+                            />
+                        </div>
+
                         {sitePfpUrl && (
                             <>
-                                <p className='font-semibold text-lg leading-snug'>Selected Site Image: <br/>{sitePfpFileName}</p>
+                                <p className="font-semibold text-lg leading-snug">
+                                    Selected Site Image: <br />
+                                    {sitePfpFileName}
+                                </p>
                                 <Image
                                     src={sitePfpUrl}
                                     alt="Site Preview"
-                                    className='h-[90px] w-[90px] rounded-full'
+                                    className="h-[90px] w-[90px] rounded-full"
                                 />
-
                             </>
                         )}
                     </div>
                 </div>
-                <div className='flex flex-row items-center justify-between w-full mt-4'>
+                <div className="flex flex-row items-center justify-between w-full mt-4">
                     <Button onClick={handleReset}>Reset Values</Button>
-                    <Button 
-                        type="submit" 
-                        color='success'
-                        variant={isButtonDisabled? 'light': 'solid'} 
-                        isDisabled={isButtonDisabled} >
-                            {isButtonDisabled? 'Images Uploaded': 'Upload Images'}
+                    <Button
+                        type="submit"
+                        color="success"
+                        variant={isButtonDisabled ? "outline" : "default"}
+                        disabled={isButtonDisabled}
+                    >
+                        {isButtonDisabled ? "Images Uploaded" : "Upload Images"}
                     </Button>
                 </div>
             </form>
