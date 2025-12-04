@@ -28,7 +28,7 @@ const formSchema = z
             .max(maxFullNameChars, {
                 message: `Full name cannot exceed ${maxFullNameChars} characters.`,
             }),
-        email: z.string().email({
+        email: z.email({
             message: "Please enter a valid email address.",
         }),
         password: z.string().min(minPasswordChars, {
@@ -45,8 +45,8 @@ type CredentialFormValues = z.infer<typeof formSchema>;
 
 export default function CredentialsInformation({
     updateCredentials,
+    showToast,
 }: UpdateCredentialsProps) {
-    // Initialize useForm with zodResolver
     const form = useForm<CredentialFormValues>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -68,12 +68,24 @@ export default function CredentialsInformation({
             });
             if (disablebtn) {
                 form.reset(values, { keepValues: true });
+                showToast({
+                    message: "User credentials updated successfully!",
+                    type: "success",
+                });
             } else {
+                showToast({
+                    message: "Update Failed on the server.",
+                    type: "error",
+                });
                 throw new Error("Update failed on the server.");
             }
         } catch (error) {
-            console.error("Update failed:", error);
+            showToast({
+                message: `Update Failed: ${error}`,
+                type: "error",
+            });
             form.reset(values, { keepValues: true, keepDirty: true });
+            throw new Error(`Update Failed: ${error}`);
         }
     };
     const handleReset = () => {

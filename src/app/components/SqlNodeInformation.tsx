@@ -4,10 +4,12 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import Toast from "./Toast";
 import { SqlNodeInformationProps } from "../../types/types";
 
-function SqlNodeInformation({ connectCreateDB }: SqlNodeInformationProps) {
+function SqlNodeInformation({
+    connectCreateDB,
+    showToast,
+}: SqlNodeInformationProps) {
     //State variables
     const [host, setHost] = useState("0.0.0.0");
     const [user, setUser] = useState("root");
@@ -21,10 +23,6 @@ function SqlNodeInformation({ connectCreateDB }: SqlNodeInformationProps) {
     const isPasswordMatch =
         password && confirmPassword && password === confirmPassword;
     const noPassword = password === "" && confirmPassword === "";
-
-    //State for Notifications associated with form validation
-    const [toastOpen, setToastOpen] = useState(false);
-    const [toastMessage, setToastMessage] = useState("");
 
     // State for button disable - prevent multiple creations without a refresh/reset
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
@@ -43,27 +41,31 @@ function SqlNodeInformation({ connectCreateDB }: SqlNodeInformationProps) {
         const portNumber = parseInt(port, 10);
         // Basic validation
         if (!host || !user || !dbName || !port) {
-            setToastMessage(
-                "Host, User, Port and Database names are required."
-            );
-            setToastOpen(true);
+            showToast({
+                message: "Host, User, Port, and Database names are required.",
+                type: "error",
+            });
             return;
         }
         if (!isPasswordMatch && !noPassword) {
-            setToastMessage("Passwords do not match.");
-            setToastOpen(true);
+            showToast({ message: "Passwords do not match.", type: "error" });
             return;
         }
         if (!blankDbPass) {
-            setToastMessage(
-                "You are trying to connect without a password please click blank pass to continue."
-            );
-            setToastOpen(true);
+            showToast({
+                message:
+                    "You are trying to connect without a password. Please enter one or click 'Blank Pass' to continue.",
+                type: "error",
+            });
             return;
         }
         if (isNaN(portNumber)) {
-            setToastMessage("The port specificed must be a number ");
+            showToast({
+                message: "The port specificed must be a number.",
+                type: "error",
+            });
         }
+        setIsButtonDisabled(true);
         // Ensure that the result is a QueryResult object with a success property
         const { disablebtn } = await connectCreateDB({
             host,
@@ -202,11 +204,6 @@ function SqlNodeInformation({ connectCreateDB }: SqlNodeInformationProps) {
                         </Button>
                     </div>
                 </div>
-                <Toast
-                    message={toastMessage}
-                    isOpen={toastOpen}
-                    onClose={() => setToastOpen(false)}
-                />
             </form>
         </div>
     );

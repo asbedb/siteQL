@@ -19,14 +19,12 @@ import CredentialsInformation from "./CredentialsInformation";
 import SiteInformation from "./SiteInformation";
 import PfpImage from "./PfpImage";
 import CustomTable from "./CustomTable";
-import Toast from "./Toast";
 import FinaliseInstallation from "./FinaliseInstallation";
+import { toast } from "sonner";
 
 export default function FormBox() {
     //state variables
     const [step, setStep] = useState<number>(1);
-    const [toastOpen, setToastOpen] = useState(false);
-    const [toastMessage, setToastMessage] = useState("");
     const [disableBtn, setDisableBtn] = useState<boolean>(true);
 
     //basic counter for installer
@@ -53,16 +51,29 @@ export default function FormBox() {
             });
             const result = await response.json();
             if (response.ok) {
-                showToast({ message: "DB Created/Updated and Connected" });
+                showToast({
+                    message: `"DB Created/Updated and Connected"`,
+                    type: "success",
+                });
                 return { disablebtn: true };
             } else {
+                showToast({
+                    message: `${result.error || "Connection failed"}`,
+                    type: "error",
+                });
                 throw new Error(result.error || "Connection failed");
             }
         } catch (error) {
             if (error instanceof Error) {
-                showToast({ message: error.message });
+                showToast({
+                    message: `${error.message || "Connection failed"}`,
+                    type: "error",
+                });
             } else {
-                showToast({ message: "An unknown error has occured" });
+                showToast({
+                    message: "An unknown error has occured",
+                    type: "error",
+                });
             }
             return { disablebtn: false };
         }
@@ -86,16 +97,27 @@ export default function FormBox() {
             });
             const result = await response.json();
             if (response.ok) {
-                showToast({ message: "Credentials Updated" });
+                showToast({ message: "Credentials Updated", type: "success" });
                 return { disablebtn: true };
             } else {
+                showToast({
+                    message: `${result.error || "Update Failed"}`,
+                    type: "error",
+                });
                 throw new Error(result.error || "Update Failed");
             }
         } catch (error) {
             if (error instanceof Error) {
-                showToast({ message: error.message });
+                showToast({
+                    message: error.message,
+                    type: "error",
+                });
+                showToast({ message: error.message, type: "error" });
             } else {
-                showToast({ message: "An unknown error occurred." });
+                showToast({
+                    message: "An unknown error occurred.",
+                    type: "error",
+                });
             }
             return { disablebtn: false };
         }
@@ -115,16 +137,26 @@ export default function FormBox() {
             });
             const result = await response.json();
             if (response.ok) {
-                showToast({ message: "Site and Profile Information Updated" });
+                showToast({
+                    message: "Site and Profile Information Updated",
+                    type: "success",
+                });
                 return { disablebtn: true };
             } else {
+                showToast({
+                    message: `${result.error || "Update Failed"}`,
+                    type: "error",
+                });
                 throw new Error(result.error || "Update Failed");
             }
         } catch (error) {
             if (error instanceof Error) {
-                showToast({ message: error.message });
+                showToast({ message: error.message, type: "error" });
             } else {
-                showToast({ message: "An unknown error occurred." });
+                showToast({
+                    message: "An unknown error occurred.",
+                    type: "error",
+                });
             }
             return { disablebtn: false };
         }
@@ -146,17 +178,26 @@ export default function FormBox() {
             });
             const result = await response.json();
             if (response.ok) {
-                showToast({ message: "Images Uploaded Succcessfully" });
+                showToast({
+                    message: "Images Uploaded Succcessfully",
+                    type: "success",
+                });
                 return { disablebtn: true };
             } else {
-                showToast({ message: `${result.error}` || "Upload failed." });
+                showToast({
+                    message: `${result.error}` || "Upload failed.",
+                    type: "error",
+                });
             }
             return { disablebtn: true };
         } catch (err) {
             if (err instanceof Error) {
-                showToast({ message: err.message });
+                showToast({ message: err.message, type: "error" });
             } else {
-                showToast({ message: "An Unknown Error has occured" });
+                showToast({
+                    message: "An Unknown Error has occured",
+                    type: "error",
+                });
             }
             return { disablebtn: true };
         }
@@ -178,13 +219,20 @@ export default function FormBox() {
             if (response.ok) {
                 showToast({
                     message: data.message || "Table created successfully!",
+                    type: "success",
                 });
                 return { disablebtn: true };
             } else {
-                showToast({ message: data.error || "Error creating table." });
+                showToast({
+                    message: data.error || "Error creating table.",
+                    type: "error",
+                });
             }
         } catch (error) {
-            showToast({ message: error + "Error creating table." });
+            showToast({
+                message: error + "Error creating table.",
+                type: "error",
+            });
         }
         return { disablebtn: false };
     };
@@ -238,11 +286,12 @@ export default function FormBox() {
                 showToast({
                     message:
                         "Finalising Installation, Page will refresh shortly - Happy developing! 🍵🍵🍵 ",
+                    type: "info",
                 });
             }, 5000);
             return data;
         } catch (error) {
-            showToast({ message: "Error: " + error });
+            showToast({ message: `Error: ${error}`, type: "error" });
             // Return a fallback response on error
             return {
                 allChecksPass: false,
@@ -252,10 +301,30 @@ export default function FormBox() {
     };
 
     //Notification System
-    const showToast = ({ message }: ShowToastParams) => {
-        setToastMessage(message);
-        setToastOpen(true);
-        setTimeout(() => setToastOpen(false), 3000);
+    const showToast = ({
+        message,
+        type = "default",
+    }: ShowToastParams & {
+        type?: "default" | "success" | "error" | "info" | "warning";
+    }) => {
+        // Use typed toasts for better color/icon matching
+        switch (type) {
+            case "success":
+                toast.success("Success", { description: message });
+                break;
+            case "error":
+                toast.error("Error", { description: message });
+                break;
+            case "info":
+                toast.info("Info", { description: message });
+                break;
+            case "warning":
+                toast.warning("Warning", { description: message });
+                break;
+            default:
+                // For default, we just use the message as the title
+                toast(message);
+        }
     };
 
     //renders current installer step
@@ -264,10 +333,16 @@ export default function FormBox() {
             case 1:
                 return <IntroductionStep />;
             case 2:
-                return <SqlNodeInformation connectCreateDB={connectCreateDB} />;
+                return (
+                    <SqlNodeInformation
+                        showToast={showToast}
+                        connectCreateDB={connectCreateDB}
+                    />
+                );
             case 3:
                 return (
                     <CredentialsInformation
+                        showToast={showToast}
                         updateCredentials={updateCredentials}
                     />
                 );
@@ -280,7 +355,12 @@ export default function FormBox() {
             case 5:
                 return <PfpImage uploadPfpImages={uploadPfpImages} />;
             case 6:
-                return <CustomTable createTable={createTable} />;
+                return (
+                    <CustomTable
+                        showToast={showToast}
+                        createTable={createTable}
+                    />
+                );
             case 7:
                 return (
                     <FinaliseInstallation
@@ -329,11 +409,6 @@ export default function FormBox() {
                     </Button>
                 )}
             </div>
-            <Toast
-                message={toastMessage}
-                isOpen={toastOpen}
-                onClose={() => setToastOpen(false)}
-            />
         </div>
     );
 }

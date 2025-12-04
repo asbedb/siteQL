@@ -22,12 +22,12 @@ export interface ConnectionParams {
     password: string;
     dbName: string;
 }
-export interface DBCredentialsParams{
+export interface DBCredentialsParams {
     fullName: string;
     password: string;
     email: string;
 }
-export interface UploadPfpImageParams{
+export interface UploadPfpImageParams {
     sitePfp: File | null;
     userPfp: File | null;
 }
@@ -42,13 +42,16 @@ export interface LoginCredentialsParams {
     userPassword: string;
 }
 
-export interface ShowToastParams{
+export interface ShowToastParams {
     message: string;
 }
 
 //PROPS
-export interface UploadImagesProps{
-    uploadPfpImages: (data: { userPfp: File | null; sitePfp: File | null;}) => Promise<QueryResult>;
+export interface UploadImagesProps {
+    uploadPfpImages: (data: {
+        userPfp: File | null;
+        sitePfp: File | null;
+    }) => Promise<QueryResult>;
 }
 
 export interface FinalInstallCheckProps {
@@ -56,21 +59,52 @@ export interface FinalInstallCheckProps {
     setDisableBtn: (state: boolean) => void;
 }
 export interface SqlNodeInformationProps {
-    connectCreateDB: (data: { host: string; port: string; user: string; password: string; dbName: string }) => Promise<QueryResult>;
+    connectCreateDB: (data: {
+        host: string;
+        port: string;
+        user: string;
+        password: string;
+        dbName: string;
+    }) => Promise<QueryResult>;
+    showToast: ({
+        message,
+        type,
+    }: ShowToastParams & {
+        type?: "default" | "success" | "error" | "info" | "warning";
+    }) => void;
 }
 export interface UpdateCredentialsProps {
-    updateCredentials: (data: { fullName: string; email: string; password: string; }) => Promise<QueryResult>;
+    updateCredentials: (data: {
+        fullName: string;
+        email: string;
+        password: string;
+    }) => Promise<QueryResult>;
+    showToast: ({
+        message,
+        type,
+    }: ShowToastParams & {
+        type?: "default" | "success" | "error" | "info" | "warning";
+    }) => void;
 }
 
 export interface UpdateSiteInformationProps {
-    updateSiteInformation: (data: { location: string; appName: string; aboutApp: string; })=> Promise<QueryResult>;
+    updateSiteInformation: (data: {
+        location: string;
+        appName: string;
+        aboutApp: string;
+    }) => Promise<QueryResult>;
 }
-export interface ToastProps{
-    message: string
-    isOpen: boolean; 
-    onClose: () => void; 
+export interface ToastProps {
+    message: string;
+    isOpen: boolean;
+    onClose: () => void;
 }
 export interface CustomTableProps {
-    createTable: (params: CreateTableParams) => Promise<QueryResult>; // Pass an object as a single argument
+    createTable: (params: CreateTableParams) => Promise<QueryResult>;
+    showToast: ({
+        message,
+        type,
+    }: ShowToastParams & {
+        type?: "default" | "success" | "error" | "info" | "warning";
+    }) => void;
 }
-

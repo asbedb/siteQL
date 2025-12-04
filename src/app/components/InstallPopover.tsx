@@ -12,7 +12,7 @@ import {
 function InstallPopover() {
     return (
         <Popover>
-            <PopoverTrigger>
+            <PopoverTrigger asChild>
                 <Button variant="outline" className="capitalize">
                     Installation Progress
                 </Button>

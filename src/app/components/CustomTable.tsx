@@ -12,14 +12,14 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CustomTableProps, CreateTableParams } from "@/types/types";
-import Toast from "./Toast";
 
-const CustomTable: React.FC<CustomTableProps> = ({ createTable }) => {
+const CustomTable: React.FC<CustomTableProps> = ({
+    createTable,
+    showToast,
+}) => {
     const [tableName, setTableName] = useState("");
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
     //Form validation notification state variables
-    const [toastOpen, setToastOpen] = useState(false);
-    const [toastMessage, setToastMessage] = useState("");
     //state variable to populate select drop down.
     const sqlTypes = [
         // Numeric Types
@@ -107,6 +107,7 @@ const CustomTable: React.FC<CustomTableProps> = ({ createTable }) => {
         { id: "column3", name: "Column 3", inputType: "" },
         { id: "column4", name: "Column 4", inputType: "" },
     ]);
+
     const handleTypeChange = (columnName: string, newType: string) => {
         setColumns((prevColumns) =>
             prevColumns.map((column) =>
@@ -141,13 +142,14 @@ const CustomTable: React.FC<CustomTableProps> = ({ createTable }) => {
             (column) => column.inputType.trim() !== ""
         );
         if (!tableName) {
-            setToastMessage("Please enter a table name");
-            setToastOpen(true);
+            showToast({ message: "Please enter a table name", type: "info" });
             return;
         }
         if (!allColumnsValid) {
-            setToastMessage("Please select a valid data type for all columns");
-            setToastOpen(true);
+            showToast({
+                message: "Please select a valid data type for all columns",
+                type: "info",
+            });
             return;
         }
         const params: CreateTableParams = {
@@ -286,7 +288,6 @@ const CustomTable: React.FC<CustomTableProps> = ({ createTable }) => {
                 <Button type="button" variant="outline" onClick={addColumn}>
                     ➕ Add Column
                 </Button>
-
                 <Button
                     type="submit"
                     onClick={handleSubmit}
@@ -295,11 +296,6 @@ const CustomTable: React.FC<CustomTableProps> = ({ createTable }) => {
                     {isButtonDisabled ? "Table Saved" : "Save Table"}
                 </Button>
             </div>
-            <Toast
-                message={toastMessage}
-                isOpen={toastOpen}
-                onClose={() => setToastOpen(false)}
-            />
         </div>
     );
 };
