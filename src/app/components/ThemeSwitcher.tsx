@@ -2,7 +2,7 @@
 "use client";
 
 import { useTheme } from "next-themes";
-import { Switch } from "@nextui-org/react";
+import { Switch } from "@/components/ui/switch";
 import { FaSun, FaMoon } from "react-icons/fa6";
 
 export function ThemeSwitcher() {
@@ -11,23 +11,23 @@ export function ThemeSwitcher() {
     const handleThemeChange = (isSelected: boolean) => {
         setTheme(isSelected ? "light" : "dark");
     };
-
+    const isLight = theme === "light";
     return (
         <div className="text-foreground">
-            <Switch 
-                isSelected={theme === "light"}
-                size="lg"
-                color="secondary"
-                onChange={(e) => handleThemeChange(e.target.checked)}
-                thumbIcon={({ isSelected, className }) =>
-                    isSelected ? (
-                        <FaSun className={className} />
+            <div className="flex items-center space-x-2">
+                <Switch
+                    checked={isLight}
+                    onCheckedChange={handleThemeChange}
+                    id="theme-toggle"
+                ></Switch>
+                <label htmlFor="theme-toggle">
+                    {isLight ? (
+                        <FaSun className="w-5 h-5 text-yellow-500" />
                     ) : (
-                        <FaMoon className={className} />
-                    )
-                }
-            >
-            </Switch>
+                        <FaMoon className="w-5 h-5 text-gray-700" />
+                    )}
+                </label>
+            </div>
         </div>
     );
 }

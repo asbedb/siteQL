@@ -1,107 +1,205 @@
-// components/CredentialsInformation.tsx
-import {useState} from 'react'
-import {Input, Button } from '@nextui-org/react'
-import Toast from './Toast';
-import { UpdateCredentialsProps } from '@/types/types';
+"use client";
+import { z } from "zod";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/ui/form";
+import { UpdateCredentialsProps } from "@/types/types";
 
-export default function CredentialsInformation({ updateCredentials}: UpdateCredentialsProps) {
-    //credential state variables
-    const [fullName, setFullName] = useState('');
-    const [password, setPassword] = useState('');
-    const [email, setEmail] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const isPasswordMatch = password && confirmPassword && password === confirmPassword;
+const minFullnameChars = 5;
+const maxFullNameChars = 100;
+const minPasswordChars = 8;
 
-    //Form validation notification state variables
-    const [toastOpen, setToastOpen] = useState(false); 
-    const [toastMessage, setToastMessage] = useState(''); 
+const formSchema = z
+    .object({
+        fullName: z
+            .string()
+            .min(minFullnameChars, {
+                message: `Full name must be at least ${minFullnameChars} characters.`,
+            })
+            .max(maxFullNameChars, {
+                message: `Full name cannot exceed ${maxFullNameChars} characters.`,
+            }),
+        email: z.email({
+            message: "Please enter a valid email address.",
+        }),
+        password: z.string().min(minPasswordChars, {
+            message: `Password must be at least ${minPasswordChars} characters.`,
+        }),
+        confirmPassword: z.string(),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+        message: "Passwords do not match.",
+        path: ["confirmPassword"],
+    });
 
-    // State for button disable - prevent multiple creations without a refresh/reset
-    const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+type CredentialFormValues = z.infer<typeof formSchema>;
 
-    const handleReset = () => {
-        setFullName('');
-        setEmail('');
-        setPassword('');
-        setConfirmPassword('');
-        setIsButtonDisabled(false);
-    }
-
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-        // Basic validation
-        if (!fullName || !email || !password) {
-            setToastMessage('Name, Email and Password Required');
-            setToastOpen(true);
-            return;
+export default function CredentialsInformation({
+    updateCredentials,
+    showToast,
+}: UpdateCredentialsProps) {
+    const form = useForm<CredentialFormValues>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            fullName: "",
+            email: "",
+            password: "",
+            confirmPassword: "",
+        },
+        mode: "onBlur",
+    });
+    const { isSubmitting, isSubmitSuccessful } = form.formState;
+    const onSubmit: SubmitHandler<CredentialFormValues> = async (values) => {
+        form.setValue("fullName", values.fullName, { shouldDirty: true });
+        try {
+            const { disablebtn } = await updateCredentials({
+                fullName: values.fullName,
+                password: values.password,
+                email: values.email,
+            });
+            if (disablebtn) {
+                form.reset(values, { keepValues: true });
+                showToast({
+                    message: "User credentials updated successfully!",
+                    type: "success",
+                });
+            } else {
+                showToast({
+                    message: "Update Failed on the server.",
+                    type: "error",
+                });
+                throw new Error("Update failed on the server.");
+            }
+        } catch (error) {
+            showToast({
+                message: `Update Failed: ${error}`,
+                type: "error",
+            });
+            form.reset(values, { keepValues: true, keepDirty: true });
+            throw new Error(`Update Failed: ${error}`);
         }
-        if (!isPasswordMatch) {
-            setToastMessage('Passwords do not match.');
-            setToastOpen(true);
-            return;
-        }
-        // Ensure that the result is a QueryResult object with a success property
-        const { disablebtn } = await updateCredentials({ fullName, password, email});
-        // Set the button disabled state based on success or failure
-        setIsButtonDisabled(disablebtn );
-        
     };
+    const handleReset = () => {
+        form.reset();
+    };
+    const isButtonDisabled = isSubmitting || isSubmitSuccessful;
     return (
-    <div className='flex w-full h-full flex-col'>
-        <span className='text-2xl font-semibold'>Setup your Credentials</span>
-        <form onSubmit={handleSubmit}>
-            <Input
-                isRequired 
-                type="text" 
-                label="Full Name"
-                value={fullName} 
-                onChange={(e) => setFullName(e.target.value)}
-                className='py-2'  />
-            <Input 
-                isRequired
-                type="email" 
-                label="Email" 
-                value={email} 
-                onChange={(e) => setEmail(e.target.value)}
-                className='py-2' />
-            <Input 
-                isRequired
-                type="password" 
-                label="User Password"
-                id='userPass'
-                name='userPass' 
-                onChange={(e) => setPassword(e.target.value)}
-                color={isPasswordMatch ? 'success' : 'warning'}
-                className='py-2' />
-            <Input 
-                isRequired
-                type="password" 
-                label="Confirm Password"
-                id='confirmPass' 
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                color={isPasswordMatch ? 'success' : 'warning'}
-                className='py-2' />
-            <div className='flex flex-row items-center justify-between w-full'>
-                <div>
-                    <Button onClick={handleReset}>Reset Values</Button>
-                </div>
-                <div>
-                    <Button 
-                        type="submit" 
-                        color='success'
-                        variant={isButtonDisabled? 'light': 'solid'} 
-                        isDisabled={isButtonDisabled} >
-                            {isButtonDisabled? 'Credentials Updated': 'Update Credentials'}
-                    </Button>
-                </div>
-            </div>
-        </form>
-        <Toast 
-            message={toastMessage} 
-            isOpen={toastOpen} 
-            onClose={() => setToastOpen(false)} 
-        />
-    </div>
-    
-    )
+        <div className="flex w-full h-full flex-col space-y-4">
+            <span className="text-2xl font-semibold">
+                Setup your Credentials
+            </span>
+            <Form {...form}>
+                <form
+                    onSubmit={form.handleSubmit(onSubmit)}
+                    className="space-y-4"
+                >
+                    <FormField
+                        control={form.control}
+                        name="fullName"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Full Name</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        type="text"
+                                        placeholder="Your Full Name"
+                                        {...field}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="email"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Email</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        type="email"
+                                        placeholder="you@example.com"
+                                        {...field}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="password"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>User Password</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        type="password"
+                                        placeholder="••••••••"
+                                        id="userPass"
+                                        {...field}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="confirmPassword"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Confirm Password</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        type="password"
+                                        placeholder="••••••••"
+                                        id="confirmPass"
+                                        {...field}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <div className="flex flex-row items-center justify-between w-full pt-2">
+                        <div>
+                            <Button
+                                type="button"
+                                variant="outline"
+                                onClick={handleReset}
+                            >
+                                Reset Values
+                            </Button>
+                        </div>
+                        <div>
+                            <Button
+                                type="submit"
+                                // Disable if submitting or already successful, AND form must be valid
+                                disabled={
+                                    isButtonDisabled || !form.formState.isValid
+                                }
+                            >
+                                {isSubmitting
+                                    ? "Updating..."
+                                    : isSubmitSuccessful
+                                    ? "Credentials Updated"
+                                    : "Update Credentials"}
+                            </Button>
+                        </div>
+                    </div>
+                </form>
+            </Form>
+        </div>
+    );
 }
