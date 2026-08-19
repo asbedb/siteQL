@@ -1,7 +1,7 @@
 allowBuilds:
-  bcrypt: set this to true or false
+  bcrypt: true
   sharp: set this to true or false
-  unrs-resolver: set this to true or false
+  unrs-resolver: true
 minimumReleaseAgeExclude:
   - tar@7.5.7
   - tar@7.5.3
